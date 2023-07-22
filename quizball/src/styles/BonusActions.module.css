@@ -1,0 +1,22 @@
+.outerContainer {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 100px;
+}
+
+.buttonContainer {
+  display: flex;
+  gap: 10px;
+}
+
+.button {
+  color: black;
+  font-family: "Trebuchet MS", "Lucida Sans Unicode", "Lucida Grande",
+    "Lucida Sans", Arial, sans-serif;
+  font-size: 26px;
+  font-weight: bold;
+  border: 2px solid white;
+  border-radius: 35px;
+  padding: 7px;
+}

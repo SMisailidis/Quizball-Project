@@ -1,0 +1,56 @@
+.outerMainScreen {
+  display: flex;
+  justify-content: center;
+  border-radius: 10px;
+  width: 80%;
+  max-width: 80%;
+}
+
+.innerMainScreen {
+  padding: 3rem;
+  border: 3px solid;
+  border-radius: 10px;
+  width: 82%;
+  max-width: 83%;
+}
+
+.container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4rem;
+}
+
+.header {
+  text-align: center;
+}
+
+.fiftyDiv {
+  display: flex;
+  justify-content: center;
+  flex-direction: column;
+  gap: 15px;
+}
+
+.questionText {
+  font-size: large;
+  display: flex;
+  justify-content: space-between;
+}
+
+.animated-text {
+  overflow: hidden;
+  white-space: nowrap;
+  animation: typing 3s steps(15, end) infinite;
+  font-family: "Trebuchet MS", "Lucida Sans Unicode", "Lucida Grande",
+    "Lucida Sans", Arial, sans-serif;
+}
+
+@keyframes typing {
+  from {
+    width: 0;
+  }
+  to {
+    width: 110%;
+  }
+}
