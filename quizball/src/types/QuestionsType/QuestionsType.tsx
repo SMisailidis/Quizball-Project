@@ -4,5 +4,5 @@ export type QuestionsType = {
   difficulty: number;
   answer: string;
   fiftyFiftyBonus: string[];
-  photoURL: string | undefined;
+  photoURL: string | null;
 };

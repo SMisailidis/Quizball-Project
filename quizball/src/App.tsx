@@ -1,15 +1,16 @@
 import styles from "./styles/main.module.css";
 import QuestionsContainer from "./pages/QuestionsContainer/QuestionsContainer";
 import MainScreen from "./pages/MainScreen/MainScreen";
-import { useState } from "react";
-import data from "./data";
+import { useEffect, useState } from "react";
 import { Player } from "./classes/Player";
 import { Box, Button, Modal, TextField, Typography } from "@mui/material";
 import ShowScore from "./pages/ShowScore/ShowScore";
 import { SelectedItemType } from "./types/SelectedItemType";
+import { CategoryType } from "./types/CategoryType";
+import { QuestionsType } from "./types/QuestionsType";
 
 export default function Home() {
-  const [categories, setCategories] = useState(data.categories);
+  const [categories, setCategories] = useState<CategoryType[]>();
   const [showScore, setShowScore] = useState(false);
   const [selectedItem, setSelectedItem] = useState<SelectedItemType>();
   const [disableButtons, setDisableButtons] = useState(false);
@@ -22,6 +23,67 @@ export default function Home() {
   const [textName1, setTextName1] = useState("");
   const [textName2, setTextName2] = useState("");
 
+
+  useEffect(() => {
+    // Fetch data from Firebase Realtime Database
+    fetch("https://quizball-project-default-rtdb.europe-west1.firebasedatabase.app/categories.json")
+      .then((response) => response.json())
+      .then((firebaseData) => {
+        // The firebaseData contains the data from Firebase
+        if (firebaseData) {
+          // Convert the object to an array (optional)
+          const dataArray: CategoryType[] = Object.values(firebaseData);
+
+          const loadedData = []
+          
+          for(const key in dataArray) {
+            loadedData.push({
+              type: dataArray[key].type,
+              id: dataArray[key].id,
+              bgColor: dataArray[key].bgColor,
+              questions: getRandomQuestions(dataArray[key].questions, 3)
+            })
+          }
+
+          setCategories(loadedData)
+        }
+      })
+      .catch((error) => {
+        console.error("Error fetching data:", error);
+      });
+  }, []);
+  
+  const getRandomQuestions = (array: QuestionsType[], numQuestions: number) => {
+
+    const shuffledArray = shuffleArray([...array]);
+  
+    const selectedQuestions: QuestionsType[] = [];
+    const difficultyQuestions: any = {
+      1: [],
+      2: [],
+      3: [],
+    };
+  
+    for (const question of shuffledArray) {
+      if (difficultyQuestions[question.difficulty].length < 1) {
+        difficultyQuestions[question.difficulty].push(question);
+        selectedQuestions.push(question);
+      }
+      if (selectedQuestions.length === numQuestions) {        
+        break;
+      }
+    }
+    return selectedQuestions.sort((a, b) => a.difficulty - b.difficulty);
+  };
+  
+  const shuffleArray = (array: QuestionsType[]) => {
+    for (let i = array.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      [array[i], array[j]] = [array[j], array[i]];
+    }
+    return array;
+  };
+  
   const onChangePlayer1Handler = (e: any) => {
     setTextName1(e.target.value);
   };
@@ -43,8 +105,6 @@ export default function Home() {
 
     onUpdatePlayers(player1, player2);
     setOpen(false)
-    player1.printData()
-    player2.printData()
   };
 
   const onUpdatePlayers = (p1: Player, p2: Player) => {
@@ -105,9 +165,10 @@ export default function Home() {
     if(!selectedItem) return
 
     if(playersTurn === null) return
+    
 
     setCategories((prevCategories) =>
-      prevCategories.map((category) => {
+      prevCategories?.map((category) => {
         // Filter out the question with the specified ID
         const filteredQuestions = category.questions.filter(
           (question) => question.id !== selectedItem.question.id
@@ -133,6 +194,8 @@ export default function Home() {
   };
 
   const checkWinner = () => {
+    if(!categories) return
+
     let count = 0;
     categories.forEach((category) => {
       if (category.questions.length - 1 <= 0) {
@@ -271,14 +334,17 @@ export default function Home() {
                 text={text}
                 />
               )}
-              <QuestionsContainer
-                categories={categories}
-                bonuses={playersTurn.bonus}
-                disableButtons={disableButtons}
-                onClickBonusHandler={onClickBonusHandler}
-                onClickQuestionHandler={onClickQuestionHandler}
-                setDisabledButtons={setDisableButtons}
-              />
+              {categories && 
+                <QuestionsContainer
+                  categories={categories}
+                  bonuses={playersTurn.bonus}
+                  disableButtons={disableButtons}
+                  onClickBonusHandler={onClickBonusHandler}
+                  onClickQuestionHandler={onClickQuestionHandler}
+                  setDisabledButtons={setDisableButtons}
+                />
+              }
+              
             </div>
           </div>
         </div>

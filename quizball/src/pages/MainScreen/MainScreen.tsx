@@ -1,8 +1,12 @@
 import { Button, Modal, TextField, Typography } from "@mui/material";
 import styles from "../../styles/MainScreen.module.css";
 import { Box } from "@mui/material";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { SelectedItemType } from "../../types/SelectedItemType/SelectedItemType";
+import { initializeApp } from "firebase/app";
+import { getStorage, ref, getDownloadURL } from 'firebase/storage';
+
+
 interface propsType {
   selectedItem: SelectedItemType;
   bonus: string;
@@ -29,11 +33,39 @@ const MainScreen = (props: propsType) => {
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
 
-  const path: string | undefined = props.selectedItem.question.photoURL;
-  let photo: any;
+  const path: string | null = props.selectedItem.question.photoURL;
   let teams: string = "";
 
   let bonus: any = props.bonus === "x2" ? 2 : 1;
+
+  const [imageUrl, setImageUrl] = useState<string>();
+
+  const firebaseConfig = {
+    apiKey: "AIzaSyDN3u-nLXGHHqwgNgs-jlqLXUQ5-CqJGZY",
+    authDomain: "quizball-project.firebaseapp.com",
+    databaseURL: "https://quizball-project-default-rtdb.europe-west1.firebasedatabase.app",
+    projectId: "quizball-project",
+    storageBucket: "quizball-project.appspot.com",
+    messagingSenderId: "642081605780",
+    appId: "1:642081605780:web:7dd71b31e9135595ea0c81",
+    measurementId: "G-NSJ9LYP634"
+  };
+
+  const app = initializeApp(firebaseConfig);
+
+  useEffect(() => {
+    const storage = getStorage(app);
+
+    const storageRef = ref(storage, `images/${path}`);
+
+    getDownloadURL(storageRef)
+      .then((url) => {
+        setImageUrl(url);
+      })
+      .catch((error) => {
+        console.error('Error downloading the image:', error);
+      });
+  }, []);
 
   const onSubmitAnswerHandler = (e: any) => {
     e.preventDefault();
@@ -50,11 +82,6 @@ const MainScreen = (props: propsType) => {
       tempArray[0] + " vs " + tempArray[1] + " | " + tempArray[2].slice(0, -4)
     );
   };
-
-  if (path !== undefined) {
-    photo = require(`../../images/${path}`);
-    teams = retrieveModalText(path);
-  }
 
   return (
     <div className={styles.outerMainScreen}>
@@ -76,7 +103,7 @@ const MainScreen = (props: propsType) => {
           </div>
           <main className={styles.questionText}>
             <span>{props.selectedItem.question.text}</span>
-            {photo !== undefined && (
+            {imageUrl && (
               <>
                 <Button
                   sx={[
@@ -105,10 +132,10 @@ const MainScreen = (props: propsType) => {
                       component="h2"
                       sx={{ textAlign: "center" }}
                     >
-                      {teams}
+                      {retrieveModalText(path as string)}
                     </Typography>
                     <img
-                      src={photo}
+                      src={imageUrl}
                       alt="as"
                       width={640}
                       height={400}
