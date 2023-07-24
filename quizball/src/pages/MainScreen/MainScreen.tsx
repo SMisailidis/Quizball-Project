@@ -1,16 +1,18 @@
-import { Button, Modal, TextField, Typography } from "@mui/material";
+import { Button, Modal, TextField, Tooltip, Typography } from "@mui/material";
 import styles from "../../styles/MainScreen.module.css";
 import { Box } from "@mui/material";
 import { useEffect, useState } from "react";
 import { SelectedItemType } from "../../types/SelectedItemType/SelectedItemType";
 import { initializeApp } from "firebase/app";
 import { getStorage, ref, getDownloadURL } from 'firebase/storage';
-
+import InfoIcon from '@mui/icons-material/Info';  
 
 interface propsType {
   selectedItem: SelectedItemType;
   bonus: string;
+  hasFifty: boolean;
   onSubmitAnswerHandler: () => void;
+  setBonus: (bonus: string) => void;
   onChangeAnswerHandler: (text: string) => void;
   text: string;
 }
@@ -28,15 +30,34 @@ const modalStyle = {
   p: 4,
 };
 
+const modalStyleFifty = {
+  position: "absolute" as "absolute",
+  top: "50%",
+  left: "50%",
+  transform: "translate(-50%, -50%)",
+  bgcolor: "background.paper",
+  border: "2px solid #000",
+  borderRadius: "40px",
+  boxShadow: 24,
+  p: 4,
+};
+
 const MainScreen = (props: propsType) => {
   const [open, setOpen] = useState(false);
+  const [openFifty, setOpenFifty] = useState(false)
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
-
+  const handleClosefiftyModal = () => setOpenFifty(false)
+  
   const path: string | null = props.selectedItem.question.photoURL;
-  let teams: string = "";
 
-  let bonus: any = props.bonus === "x2" ? 2 : 1;
+  const handleOpenfiftyModal = () => {
+    props.setBonus("50-50")
+    setOpenFifty(true)
+  }
+
+  let bonus: any = props.bonus === "x2" ? 2 : 1/props.selectedItem.question.difficulty;
+
 
   const [imageUrl, setImageUrl] = useState<string>();
 
@@ -54,6 +75,7 @@ const MainScreen = (props: propsType) => {
   const app = initializeApp(firebaseConfig);
 
   useEffect(() => {
+    if(!path) return
     const storage = getStorage(app);
 
     const storageRef = ref(storage, `images/${path}`);
@@ -65,7 +87,7 @@ const MainScreen = (props: propsType) => {
       .catch((error) => {
         console.error('Error downloading the image:', error);
       });
-  }, []);
+  }, [path, app]);
 
   const onSubmitAnswerHandler = (e: any) => {
     e.preventDefault();
@@ -148,36 +170,53 @@ const MainScreen = (props: propsType) => {
               </>
             )}
           </main>
-        </div>
-
-        {props.bonus === "50-50" && (
-          <>
-            <div className={styles.fiftyDiv}>
-              {props.selectedItem.question.fiftyFiftyBonus.map(
-                (answer, index) => (
-                  <Box
-                    key={index}
-                    sx={[
-                      {
-                        border: `3px solid ${props.selectedItem.category.bgColor}`,
-                      },
-                      { borderRadius: "20px" },
-                    ]}
-                  >
-                    <Typography
-                      id="modal-modal-title"
-                      variant="h6"
-                      component="h2"
-                      sx={[{ textAlign: "center" }, { p: 0.5 }]}
+          {props.hasFifty && <Button
+            sx={[
+              {
+                border: `1px solid ${props.selectedItem.category.bgColor}`,
+              },
+              { borderRadius: "20px" },
+              {
+                color: `${props.selectedItem.category.bgColor} !important`,
+              },
+            ]}
+            onClick={handleOpenfiftyModal}
+          >
+            50-50?
+          </Button>}
+          <Modal
+            open={openFifty}
+            onClose={handleClosefiftyModal}
+            aria-labelledby="modal-modal-title"
+            aria-describedby="modal-modal-description"
+          >
+            <Box sx={modalStyleFifty}>
+                {props.selectedItem.question.fiftyFiftyBonus.map(
+                  (answer, index) => (
+                    <Box
+                      key={index}
+                      sx={[
+                        {
+                          border: `3px solid ${props.selectedItem.category.bgColor}`,
+                        },
+                        { borderRadius: "20px" },
+                        {marginBottom: "5px"}
+                      ]}
                     >
-                      {index + 1}. {answer}
-                    </Typography>
-                  </Box>
-                )
-              )}
-            </div>
-          </>
-        )}
+                      <Typography
+                        id="modal-modal-title"
+                        variant="h6"
+                        component="h2"
+                        sx={[{ textAlign: "center" }, { p: 0.5 }]}
+                      >
+                        {index + 1}. {answer}
+                      </Typography>
+                    </Box>
+                  )
+                )}
+            </Box>
+          </Modal>
+        </div>
         <div>
           <TextField
             id="outlined-basic"
@@ -199,6 +238,9 @@ const MainScreen = (props: propsType) => {
             value={props.text}
             onChange={onChangeAnswerHandler}
           />
+          <Tooltip disableFocusListener title="ΟΙ ΑΠΑΝΤΗΣΕΙΣ ΣΑΣ ΝΑ ΕΙΝΑΙ ΣΤΑ ΕΛΛΗΝΙΚΑ ΚΑΙ ΧΩΡΙΣ ΤΟΝΟΥΣ">
+            <InfoIcon />
+          </Tooltip>
         </div>
         <Button
           variant="contained"

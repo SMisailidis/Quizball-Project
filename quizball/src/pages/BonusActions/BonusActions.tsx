@@ -15,6 +15,7 @@ const BonusActions = (props: PropsType) => {
     <div className={styles.outerContainer}>
       <div className={styles.buttonContainer}>
         {props.bonuses.map((bonus, index) => (
+          bonus !== "50-50" &&(
           <Button
             className={styles.button}
             key={index}
@@ -40,7 +41,7 @@ const BonusActions = (props: PropsType) => {
             onClick={onClickBonusHandler}
           >
             {bonus}
-          </Button>
+          </Button>)
         ))}
         <Button
           variant="contained"

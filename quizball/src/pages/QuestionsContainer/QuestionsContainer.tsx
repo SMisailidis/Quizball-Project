@@ -32,9 +32,12 @@ const QuestionsContainer = (props: propsType) => {
   const [openBonus, setOpenBonus] = useState(false);
   const handleOpenBonus = () => setOpenBonus(true);
   const handleCloseBonus = () => setOpenBonus(false);
+  const [obj, setObj] = useState<SelectedItemType | undefined>()
 
   const onClickBonusHandler = (text: string) => {
     handleCloseBonus();
+
+    props.onClickQuestionHandler(obj as SelectedItemType);
     props.onClickBonusHandler(text);
   };
 
@@ -52,15 +55,17 @@ const QuestionsContainer = (props: propsType) => {
       categories[categoryIndex].questions
     );
 
-    const obj: SelectedItemType = {
+    setObj({
       category: categories[categoryIndex],
       question: categories[categoryIndex].questions[questionIndex],
-    };
+    })
 
-    if (props.bonuses.length !== 0) handleOpenBonus();
+    if (props.bonuses.findIndex(bonus => bonus !== "x2") !== 0) handleOpenBonus();
+    
+    if(props.bonuses.length === 0 || props.bonuses[0] === "50-50"){
+      props.onClickQuestionHandler(obj as SelectedItemType);
+    }
     props.setDisabledButtons(true);
-
-    props.onClickQuestionHandler(obj);
   };
 
   const findIndex = (id: string, obj: Array<any>) => {

@@ -15,14 +15,13 @@
   max-width: 100%;
 
   list-style: none;
-  margin-right: 40px;
+  margin-right: 10px;
   gap: 5px;
 }
 
 .innerCategories {
   display: flex;
   justify-content: space-between;
-  margin-right: 10px;
   align-items: center;
 }
 

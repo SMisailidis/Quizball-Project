@@ -1,13 +1,13 @@
 import styles from "./styles/main.module.css";
 import QuestionsContainer from "./pages/QuestionsContainer/QuestionsContainer";
-import MainScreen from "./pages/MainScreen/MainScreen";
-import { useEffect, useState } from "react";
-import { Player } from "./classes/Player";
-import { Box, Button, Modal, TextField, Typography } from "@mui/material";
 import ShowScore from "./pages/ShowScore/ShowScore";
+import MainScreen from "./pages/MainScreen/MainScreen";
 import { SelectedItemType } from "./types/SelectedItemType";
 import { CategoryType } from "./types/CategoryType";
 import { QuestionsType } from "./types/QuestionsType";
+import { Player } from "./classes/Player";
+import { useEffect, useState } from "react";
+import { Box, Button, Modal, TextField, Typography } from "@mui/material";
 
 export default function Home() {
   const [categories, setCategories] = useState<CategoryType[]>();
@@ -25,13 +25,10 @@ export default function Home() {
 
 
   useEffect(() => {
-    // Fetch data from Firebase Realtime Database
     fetch("https://quizball-project-default-rtdb.europe-west1.firebasedatabase.app/categories.json")
       .then((response) => response.json())
       .then((firebaseData) => {
-        // The firebaseData contains the data from Firebase
         if (firebaseData) {
-          // Convert the object to an array (optional)
           const dataArray: CategoryType[] = Object.values(firebaseData);
 
           const loadedData = []
@@ -44,7 +41,6 @@ export default function Home() {
               questions: getRandomQuestions(dataArray[key].questions, 3)
             })
           }
-
           setCategories(loadedData)
         }
       })
@@ -138,6 +134,7 @@ export default function Home() {
     if (bonus === "x2") {
       points = points * 2;
     } else if (bonus === "50-50") {
+      setBonus("50-50");
       points = 1;
     }
 
@@ -165,23 +162,39 @@ export default function Home() {
     if(!selectedItem) return
 
     if(playersTurn === null) return
+
+    setCategories((prevCategories) => {
+
+      if(!prevCategories) return 
+
+      const categoryIdToFilter = selectedItem.category.id;
     
-
-    setCategories((prevCategories) =>
-      prevCategories?.map((category) => {
-        // Filter out the question with the specified ID
-        const filteredQuestions = category.questions.filter(
-          (question) => question.id !== selectedItem.question.id
-        );
-
-        // Return the category object with the updated questions
-        return {
-          ...category,
-          questions: filteredQuestions,
-        };
-      })
-    );
-
+      const categoryToFilter = prevCategories.find(
+        (category) => category.id === categoryIdToFilter
+      );
+    
+      if (!categoryToFilter) {
+        return prevCategories;
+      }
+    
+      const filteredQuestions = categoryToFilter.questions.filter(
+        (question) => question.id !== selectedItem.question.id
+      );
+    
+      const updatedCategories = prevCategories.map((category) => {
+        if (category.id === categoryIdToFilter) {
+          return {
+            ...category,
+            questions: filteredQuestions,
+          };
+        } else {
+          return category;
+        }
+      });
+    
+      return updatedCategories;
+    });
+    
     if (bonus === "") return;
 
     const updatedBonuses = playersTurn.bonus.filter(
@@ -189,7 +202,6 @@ export default function Home() {
     );
 
     playersTurn.setBonuses(updatedBonuses);
-
     setBonus("");
   };
 
@@ -329,6 +341,8 @@ export default function Home() {
                 <MainScreen
                 selectedItem={selectedItem}
                 bonus={bonus}
+                setBonus={setBonus}
+                hasFifty={playersTurn.bonus.find(bonus => bonus === "50-50") !== undefined}
                 onSubmitAnswerHandler={onSubmitAnswerHandler}
                 onChangeAnswerHandler={onChangeAnswerHandler}
                 text={text}
@@ -344,7 +358,6 @@ export default function Home() {
                   setDisabledButtons={setDisableButtons}
                 />
               }
-              
             </div>
           </div>
         </div>
