@@ -1,11 +1,10 @@
-import { Button, Modal, TextField, Tooltip, Typography } from "@mui/material";
+import { Button, Modal, TextField, Typography } from "@mui/material";
 import styles from "../../styles/MainScreen.module.css";
 import { Box } from "@mui/material";
 import { useEffect, useState } from "react";
 import { SelectedItemType } from "../../types/SelectedItemType/SelectedItemType";
 import { initializeApp } from "firebase/app";
 import { getStorage, ref, getDownloadURL } from 'firebase/storage';
-import InfoIcon from '@mui/icons-material/Info';  
 
 interface propsType {
   selectedItem: SelectedItemType;
@@ -101,7 +100,7 @@ const MainScreen = (props: propsType) => {
   const retrieveModalText = (teams: string) => {
     const tempArray = teams.split("-");
     return (
-      tempArray[0] + " vs " + tempArray[1] + " | " + tempArray[2].slice(0, -4)
+      tempArray[0] + " vs " + tempArray[1] + " | " + tempArray[2] + " " + tempArray[3].slice(0, -4)
     );
   };
 
@@ -238,9 +237,6 @@ const MainScreen = (props: propsType) => {
             value={props.text}
             onChange={onChangeAnswerHandler}
           />
-          <Tooltip disableFocusListener title="ΟΙ ΑΠΑΝΤΗΣΕΙΣ ΣΑΣ ΝΑ ΕΙΝΑΙ ΣΤΑ ΕΛΛΗΝΙΚΑ ΚΑΙ ΧΩΡΙΣ ΤΟΝΟΥΣ">
-            <InfoIcon />
-          </Tooltip>
         </div>
         <Button
           variant="contained"

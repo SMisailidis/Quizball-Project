@@ -8,8 +8,11 @@ import { QuestionsType } from "./types/QuestionsType";
 import { Player } from "./classes/Player";
 import { useEffect, useState } from "react";
 import { Box, Button, Modal, TextField, Typography } from "@mui/material";
+import UploadQuestions from "./pages/UploadQuestions/UploadQuestions";
+import SelectOptions from "./pages/SelectOptions/SelectOptions";
 
 export default function Home() {
+  document.title = "Quizball"
   const [categories, setCategories] = useState<CategoryType[]>();
   const [showScore, setShowScore] = useState(false);
   const [selectedItem, setSelectedItem] = useState<SelectedItemType>();
@@ -22,7 +25,14 @@ export default function Home() {
   const [open, setOpen] = useState(true);
   const [textName1, setTextName1] = useState("");
   const [textName2, setTextName2] = useState("");
+  const [isOpenQuiz, setIsOpenQuiz] = useState(false)
+  const [isOpenUpload, setIsOpenUpload] = useState(false)
+  const [hideSelectButtons, setHideSelectButtons] = useState(true)
 
+  const removeTonalMarks = (text: string) => {
+    const tonalMarksRegex = /[\u0300-\u036F]/g;
+    return text.normalize("NFD").replace(tonalMarksRegex, "");
+  };
 
   useEffect(() => {
     fetch("https://quizball-project-default-rtdb.europe-west1.firebasedatabase.app/categories.json")
@@ -49,18 +59,17 @@ export default function Home() {
       });
   }, []);
   
-  const getRandomQuestions = (array: QuestionsType[], numQuestions: number) => {
-
-    const shuffledArray = shuffleArray([...array]);
+  const getRandomQuestions = (data: QuestionsType[], numQuestions: number) => {
+    const dataArray: any[] = Object.values(data); // Convert the object values to an array
   
-    const selectedQuestions: QuestionsType[] = [];
+    const selectedQuestions: any[] = [];
     const difficultyQuestions: any = {
       1: [],
       2: [],
       3: [],
     };
   
-    for (const question of shuffledArray) {
+    for (const question of dataArray) {
       if (difficultyQuestions[question.difficulty].length < 1) {
         difficultyQuestions[question.difficulty].push(question);
         selectedQuestions.push(question);
@@ -71,6 +80,7 @@ export default function Home() {
     }
     return selectedQuestions.sort((a, b) => a.difficulty - b.difficulty);
   };
+  
   
   const shuffleArray = (array: QuestionsType[]) => {
     for (let i = array.length - 1; i > 0; i--) {
@@ -138,7 +148,9 @@ export default function Home() {
       points = 1;
     }
 
-    if (text.toUpperCase() === selectedItem.question.answer.toUpperCase()) {
+    const noTonalText = removeTonalMarks(text)
+
+    if (noTonalText.toUpperCase() === selectedItem.question.answer.toUpperCase()) {
       alert("Congratulations! You got it right!");
       playersTurn.setScore(points);
     } else {
@@ -262,11 +274,21 @@ export default function Home() {
   
   return (
     <>
-      <Modal
-        open={open}
-        aria-labelledby="modal-modal-title"
-        aria-describedby="modal-modal-description"
-      >
+
+      {hideSelectButtons && (
+        <SelectOptions setIsOpenQuiz={setIsOpenQuiz} setIsOpenUpload={setIsOpenUpload} setHideSelectButtons={setHideSelectButtons} />
+      )}
+
+      {isOpenUpload && (
+        <UploadQuestions categories={categories as CategoryType[]} />
+      )}
+
+      {isOpenQuiz && (
+        <Modal
+          open={open}
+          aria-labelledby="modal-modal-title"
+          aria-describedby="modal-modal-description"
+        >
         <Box sx={modalStyle}>
           <Typography
             id="modal-modal-title"
@@ -310,8 +332,9 @@ export default function Home() {
             </Button>
           </div>
         </Box>
-      </Modal>
-
+        </Modal>
+      )}
+      
       {showScore && (
         <ShowScore
           player1={player1}
