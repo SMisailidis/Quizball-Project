@@ -8,7 +8,9 @@ interface PropsType {
 
 const BonusActions = (props: PropsType) => {
   const onClickBonusHandler = (e: any) => {
-    props.onClickBonusHandler(e.target.value);
+    const { value } = e.target
+
+    props.onClickBonusHandler(value);
   };
 
   return (

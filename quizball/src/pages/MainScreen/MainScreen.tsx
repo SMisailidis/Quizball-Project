@@ -55,7 +55,7 @@ const MainScreen = (props: propsType) => {
     setOpenFifty(true)
   }
 
-  let bonus: any = props.bonus === "x2" ? 2 : 1/props.selectedItem.question.difficulty;
+  let bonus: any = props.bonus === "x2" ? 2 : 1;
 
 
   const [imageUrl, setImageUrl] = useState<string>();

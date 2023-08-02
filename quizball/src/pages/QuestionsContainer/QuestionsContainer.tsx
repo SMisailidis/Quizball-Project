@@ -30,15 +30,20 @@ const modalStyle = {
 const QuestionsContainer = (props: propsType) => {
   const categories: CategoryType[] = props.categories;
   const [openBonus, setOpenBonus] = useState(false);
-  const handleOpenBonus = () => setOpenBonus(true);
   const handleCloseBonus = () => setOpenBonus(false);
   const [obj, setObj] = useState<SelectedItemType | undefined>()
-
+  
+  const handleOpenBonus = () => {
+    setOpenBonus(true)
+  };
+  
   const onClickBonusHandler = (text: string) => {
     handleCloseBonus();
 
-    props.onClickQuestionHandler(obj as SelectedItemType);
-    props.onClickBonusHandler(text);
+    onClickQuestionHandler(obj as SelectedItemType)
+
+    if(text !== "")
+      props.onClickBonusHandler(text);
   };
 
   const onClickHandler = (e: any) => {
@@ -60,13 +65,14 @@ const QuestionsContainer = (props: propsType) => {
       question: categories[categoryIndex].questions[questionIndex],
     })
 
-    if (props.bonuses.findIndex(bonus => bonus !== "x2") !== 0) handleOpenBonus();
-    
-    if(props.bonuses.length === 0 || props.bonuses[0] === "50-50"){
-      props.onClickQuestionHandler(obj as SelectedItemType);
-    }
+    handleOpenBonus();
+
     props.setDisabledButtons(true);
   };
+
+  const onClickQuestionHandler = (obj: SelectedItemType) => {
+    props.onClickQuestionHandler(obj);
+  }
 
   const findIndex = (id: string, obj: Array<any>) => {
     const index = obj.findIndex((obj) => obj.id === id);

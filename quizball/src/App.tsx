@@ -15,7 +15,7 @@ export default function Home() {
   document.title = "Quizball"
   const [categories, setCategories] = useState<CategoryType[]>();
   const [showScore, setShowScore] = useState(false);
-  const [selectedItem, setSelectedItem] = useState<SelectedItemType>();
+  const [selectedItem, setSelectedItem] = useState<SelectedItemType | undefined>();
   const [disableButtons, setDisableButtons] = useState(false);
   const [bonus, setBonus] = useState("");
   const [text, setText] = useState("");
@@ -61,7 +61,8 @@ export default function Home() {
   
   const getRandomQuestions = (data: QuestionsType[], numQuestions: number) => {
     const dataArray: any[] = Object.values(data); // Convert the object values to an array
-  
+    const shuffledArray = shuffleArray(dataArray)
+
     const selectedQuestions: any[] = [];
     const difficultyQuestions: any = {
       1: [],
@@ -69,7 +70,7 @@ export default function Home() {
       3: [],
     };
   
-    for (const question of dataArray) {
+    for (const question of shuffledArray) {
       if (difficultyQuestions[question.difficulty].length < 1) {
         difficultyQuestions[question.difficulty].push(question);
         selectedQuestions.push(question);
@@ -81,8 +82,7 @@ export default function Home() {
     return selectedQuestions.sort((a, b) => a.difficulty - b.difficulty);
   };
   
-  
-  const shuffleArray = (array: QuestionsType[]) => {
+  const shuffleArray = (array: any[]) => {
     for (let i = array.length - 1; i > 0; i--) {
       const j = Math.floor(Math.random() * (i + 1));
       [array[i], array[j]] = [array[j], array[i]];
@@ -134,7 +134,8 @@ export default function Home() {
 
   const onSubmitAnswerHandler = () => {
     setText("");
-
+    setSelectedItem(undefined);
+    
     if(!selectedItem) return
 
     if(playersTurn === null) return
@@ -164,7 +165,6 @@ export default function Home() {
     checkWinner();
     setShowScore(true);
     removeQuestion();
-    setSelectedItem(undefined);
     pickTurn();
     setDisableButtons(false);
   }
