@@ -16,10 +16,10 @@ interface propsType {
 
 const modalStyle = {
   position: "absolute" as "absolute",
-  top: "43%",
-  left: "40%",
+  top: "50%",
+  left: "50%",
   transform: "translate(-50%, -50%)",
-  width: 640,
+  width: "50%",
   bgcolor: "background.paper",
   border: "2px solid #000",
   borderRadius: "40px",
@@ -37,6 +37,10 @@ const QuestionsContainer = (props: propsType) => {
     setOpenBonus(true)
   };
   
+  const onResizeHandler = (e : any) =>{
+
+  }
+
   const onClickBonusHandler = (text: string) => {
     handleCloseBonus();
 
@@ -47,6 +51,17 @@ const QuestionsContainer = (props: propsType) => {
   };
 
   const onClickHandler = (e: any) => {
+    const viewPortWidth = document.documentElement.clientWidth;
+    console.log(viewPortWidth);
+
+    let qContainer;
+
+    if(viewPortWidth <= 1200){
+      qContainer = document.getElementById("container") as HTMLElement;
+      qContainer.style.display = "none";
+    }
+       
+
     e.preventDefault();
 
     const splittedID = e.target.id.split(" ");
@@ -101,7 +116,7 @@ const QuestionsContainer = (props: propsType) => {
           />
         </Box>
       </Modal>
-      <div className={styles.container}>
+      <div className={styles.container} id="container">
         <ul className={styles.list}>
           {categories.map((category, index) => (
             <div
@@ -139,11 +154,15 @@ const QuestionsContainer = (props: propsType) => {
                         {
                           fontSize: "18px",
                         },
+                        {
+                          width: "8vw",
+                        }
                       ]}
                       onClick={onClickHandler}
                     >
                       {`x${question.difficulty}`}
                     </Button>
+                    // <button className={styles.button}>dsadasd</button>
                   ))}
                 </div>
               </li>

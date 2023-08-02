@@ -1,3 +1,6 @@
+
+
+
 .outerContainer{
     display: flex;
     justify-content: space-evenly;
@@ -7,16 +10,15 @@
     left: 50%;
     top: 50%;    
     transform: translate(-50%, -50%);
-    width: 300px;
     background-color: #fff;
     border: 1px solid #ccc;
     border-radius: 10px;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
     overflow: hidden;
     height: 80%;   
-    width: fit-content;
-    padding-left: 5px;
-    padding-right: 5px;
+    width: 50%;
+    padding-left: 10px;
+    padding-right: 10px;
 }
 
 .textFieldsContainer{
@@ -29,3 +31,37 @@
     width: 100%;
     text-align: center;
 }
+
+.file-input-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    padding: 10px;
+    border-radius: 5px;
+    
+  }
+  
+  .custom-file-label {
+    display: inline-block;
+    cursor: pointer;
+    text-align: center;
+    padding: 5px 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    width: 35%;
+  }
+  
+  /* Hide the default file input */
+  .custom-file-input {
+    display: none;
+  }
+  
+
+  @media only screen and (max-width: 1000px){
+    .textFieldsContainer{
+       
+        grid-template-columns: repeat(1, 1fr);
+    }
+    
+  }

@@ -3,22 +3,33 @@
   justify-content: center;
   border-radius: 10px;
   width: 80%;
-  max-width: 80%;
+  
+  
 }
 
 .innerMainScreen {
   padding: 3rem;
+  display: flex;
+    flex-direction: column;
+    align-items: center;
   border: 3px solid;
   border-radius: 10px;
-  width: 82%;
-  max-width: 83%;
+  width: 80%;
+ 
+  
 }
 
 .container {
   display: flex;
+  width: 100%;
+  /* border: 2px solid black; */
+  padding: 0 10px;
   flex-direction: column;
   align-items: center;
   gap: 4rem;
+  
+  
+
 }
 
 .header {
@@ -34,8 +45,11 @@
 
 .questionText {
   font-size: large;
+  width: 100%;
   display: flex;
-  justify-content: space-between;
+  align-items: center;
+  justify-content: space-evenly;
+  
 }
 
 .animated-text {
@@ -46,6 +60,10 @@
     "Lucida Sans", Arial, sans-serif;
 }
 
+.answerInput{
+  width: 550px;
+}
+
 @keyframes typing {
   from {
     width: 0;
@@ -53,4 +71,41 @@
   to {
     width: 110%;
   }
+}
+
+@media only screen and (max-width: 1200px){
+  .innerMainScreen{
+    width: 70%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .questionText{
+    flex-direction: column;
+    margin-bottom: 8px;
+    gap: 8px;
+  }
+}
+
+
+@media only screen and (max-width: 750px){
+  .innerMainScreen{
+    width: 70%;
+    
+    
+  }
+
+  .answerInput{
+    width: 100%;
+  }
+
+  .questionText{
+    text-align: center;
+    margin-bottom: 15px;
+  }
+
+
+
+
 }

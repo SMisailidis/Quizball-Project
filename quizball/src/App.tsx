@@ -162,6 +162,10 @@ export default function Home() {
       );
     }
 
+    let qContainer = document.getElementById("container");
+    if(qContainer?.style.display === "none")
+        qContainer.style.display = "flex";
+
     checkWinner();
     setShowScore(true);
     removeQuestion();
@@ -264,7 +268,7 @@ export default function Home() {
     top: "50%",
     left: "50%",
     transform: "translate(-50%, -50%)",
-    width: "500px",
+    width: "55%",
     bgcolor: "background.paper",
     border: "2px solid #000",
     borderRadius: "40px",

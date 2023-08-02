@@ -1,6 +1,7 @@
 .main {
   display: flex;
   justify-content: center;
+  
 }
 
 .outerMainScreen {
@@ -11,10 +12,8 @@
 .innerMain {
   display: flex;
   align-items: center;
-  justify-content: space-between;
-  width: 120%;
-  max-width: 120%;
-
+  justify-content: center;
+  width: 100%;
   margin-top: 4rem;
   border: 2px solid black;
   border-radius: 10px;
@@ -23,14 +22,18 @@
 .innerMainContainer {
   display: flex;
   align-items: center;
-  width: 65%;
-  max-width: 80%;
+  width: 100%;
+  margin: 0 100px;
+  
+  
 }
 
 .emptyDiv {
   text-align: center;
-  width: 80%;
-  max-width: 80%;
+  width: 100%;
+  margin: 0;
+  /* border: 2px solid red; */
+  
 }
 
 .textField {
@@ -39,4 +42,26 @@
   justify-content: center;
   flex-direction: column;
   gap: 10px;
+}
+
+
+
+@media only screen and (max-width: 1200px) {
+  .emptyDiv{
+    width: 50ch;
+  }
+
+  .innerMain{
+    flex-direction: column;
+    gap: 8px;
+    justify-content: center;
+    align-items: center;
+    
+  }
+
+  .innerMainContainer{
+    margin: 0 35px;
+  }
+
+
 }

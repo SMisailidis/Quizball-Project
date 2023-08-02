@@ -1,10 +1,12 @@
 .container {
   display: flex;
+  justify-content: center;
   border-left: 3px solid black;
   border-radius: 10px;
-  background-color: #98e1e9;
-  width: 50%;
-  max-width: 50%;
+  background-color: #d9f1f4;
+  width: 70%;
+  padding: 0 50px;
+  
 }
 
 .list {
@@ -12,10 +14,11 @@
   flex-direction: column;
   justify-content: space-between;
   width: 100%;
-  max-width: 100%;
+  padding: 0;
+  
 
   list-style: none;
-  margin-right: 10px;
+  /* margin-right: 10px; */
   gap: 5px;
 }
 
@@ -32,25 +35,70 @@
 }
 
 .buttonContainer {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  grid-gap: 10px;
+  display: flex;
+  justify-content: flex-end;  
+  width: 100%;
+  margin-left: 25px;
+  gap: 5px;
 }
 
 .button {
-  color: black;
-  font-family: "Trebuchet MS", "Lucida Sans Unicode", "Lucida Grande",
-    "Lucida Sans", Arial, sans-serif;
-  font-size: 26px;
-  font-weight: bold;
+  width: 80%;
+  background-color: inherit;
   border: 2px solid white;
-  border-radius: 35px;
-  padding: 7px;
+  border-radius: 15px;
+  height: 35px;
+  padding: 0px 15px;
+  color: white;
 }
 
 .span {
   color: white;
-  font-size: large;
+  
+  text-align: center;
+  font-size: 1.2rem;
   font-family: "Trebuchet MS", "Lucida Sans Unicode", "Lucida Grande",
     "Lucida Sans", Arial, sans-serif;
+}
+
+
+@media only screen and (max-width: 1200px) {
+  .button{
+    width: 100%;
+  }
+
+  .buttonContainer{
+    width: 25vw;
+  }
+  .container{
+    background-color: inherit;
+    border-left: none;
+  }
+
+
+ 
+
+}
+
+@media only screen and (max-width: 750px){
+  .innerCategories{
+    flex-direction: column;
+    align-items: center;
+     text-align: center;
+     gap: 10px;
+     /* border: 2px solid red; */
+    
+  }
+
+  .buttonContainer{
+    justify-content: center;
+    width: 100%;
+    margin-left: 0;
+    gap: 6px;
+   
+  }
+  .span{
+    width: 100%;
+  }
+  
 }

@@ -181,7 +181,7 @@ const UploadQuestions = (props: propsType) => {
                     <h2>Συμπλήρωσε την φόρμα</h2>
                     <hr />
                 </div>
-                <FormControl sx={{width: 250}}>
+                <FormControl sx={{width:"60%"}}>
                     <InputLabel id="demo-simple-select-label" error={!isCorrectCategory}>Διάλεξε μία κατηγορία</InputLabel>
                     <Select
                         error={!isCorrectCategory}
@@ -200,14 +200,14 @@ const UploadQuestions = (props: propsType) => {
                     <TextField
                         required = {isCorrectQuestion}
                         error = {!isCorrectQuestion}
-                        sx={{width: 250}}
+                        sx={{width: "100%"}}
                         id="outlined-basic"
                         label="Δώσε το κείμενο της ερώτησης"
                         variant="outlined"
                         value={questionTextField}
                         onChange={questionTextHandler}
                     />
-                    <FormControl sx={{width: 250}}>
+                    <FormControl sx={{width: "100%"}}>
                         <InputLabel id="demo-simple-select-label">Δώσε την δυσκολία της ερώτησης</InputLabel>
                         <Select
                             labelId="demo-simple-select-label"
@@ -224,7 +224,7 @@ const UploadQuestions = (props: propsType) => {
                     <TextField
                         required = {isCorrectAnswer}
                         error = {!isCorrectAnswer}
-                        sx={{width: 250}}
+                        sx={{width: "100%"}}
                         id="outlined-basic"
                         label="Δώσε την απάντηση της ερώτησης"
                         variant="outlined"
@@ -234,7 +234,7 @@ const UploadQuestions = (props: propsType) => {
                     <TextField
                         required = {isCorrectFifty}
                         error = {!isCorrectFifty}
-                        sx={{width: 250}}
+                        sx={{width: "100%"}}
                         id="standard-helperText"
                         label="Δώσε την βοήθεια 50-50"
                         variant="outlined"
@@ -243,11 +243,19 @@ const UploadQuestions = (props: propsType) => {
                         onChange={fiftyTextHandler}
                     />
                 </div>
-                <div>
+                {/* <div className={styles.fileInp}>
                     <input id="fileInput" type="file" onChange={handleFileChange} accept=".png" />
+                </div> */}
+
+                <div className={styles["file-input-container"]}>
+                 <label htmlFor="fileInput" className={styles["custom-file-label"]}>
+                    Select a file
+                    <input  onChange={handleFileChange} accept=".png" type="file" id="fileInput"  className={styles["custom-file-input"]}/>
+                    </label>
                 </div>
+
                 <div>
-                    <Button variant="contained" color={success} sx={{width: 250}} onClick={handleSubmitQuestion}>Καταχωρησε την ερωτηση</Button>
+                    <Button variant="contained" color={success} sx={{width: "100%"}} onClick={handleSubmitQuestion}>Καταχωρησε την ερωτηση</Button>
                 </div>
             </div>
         </div>

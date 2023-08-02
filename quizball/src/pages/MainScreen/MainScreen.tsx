@@ -115,12 +115,12 @@ const MainScreen = (props: propsType) => {
           style={{ borderColor: props.selectedItem.category.bgColor }}
         >
           <div className={styles.header}>
-            <h1 style={{ color: props.selectedItem.category.bgColor }}>
+            <h1 style={{ color: props.selectedItem.category.bgColor, borderBottom: " 2px solid black" }}>
               {props.selectedItem.category.type}
               {" x"}
               {props.selectedItem.question.difficulty * bonus}
             </h1>
-            <hr></hr>
+            
           </div>
           <main className={styles.questionText}>
             <span>{props.selectedItem.question.text}</span>
@@ -199,7 +199,10 @@ const MainScreen = (props: propsType) => {
                           border: `3px solid ${props.selectedItem.category.bgColor}`,
                         },
                         { borderRadius: "20px" },
-                        {marginBottom: "5px"}
+                        {marginBottom: "5px"},
+                        {
+                          padding:"0 8px 0 8px"
+                        }
                       ]}
                     >
                       <Typography
@@ -216,13 +219,14 @@ const MainScreen = (props: propsType) => {
             </Box>
           </Modal>
         </div>
-        <div>
+        <div className = {styles.answerInput}>
           <TextField
             id="outlined-basic"
+            fullWidth
             label="Σημπλήρωσε την απάντησή σου εδώ"
             variant="outlined"
             sx={[
-              { width: 550 },
+               
               {
                 "& .MuiOutlinedInput-root .MuiOutlinedInput-notchedOutline": {
                   borderColor: `${props.selectedItem.category.bgColor} !important`,
@@ -247,6 +251,9 @@ const MainScreen = (props: propsType) => {
                 backgroundColor: "#6cdbe7",
               },
             },
+            {
+              marginBottom: "10px",
+            }
           ]}
           onClick={onSubmitAnswerHandler}
         >
