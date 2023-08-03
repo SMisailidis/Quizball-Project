@@ -14,6 +14,7 @@ import SelectOptions from "./pages/SelectOptions/SelectOptions";
 export default function Home() {
   document.title = "Quizball"
   const [categories, setCategories] = useState<CategoryType[]>();
+  const [selectAnswers, setSelectAnswers] = useState<CategoryType[]>()
   const [showScore, setShowScore] = useState(false);
   const [selectedItem, setSelectedItem] = useState<SelectedItemType | undefined>();
   const [disableButtons, setDisableButtons] = useState(false);
@@ -52,6 +53,7 @@ export default function Home() {
             })
           }
           setCategories(loadedData)
+          setSelectAnswers(loadedData)
         }
       })
       .catch((error) => {
@@ -263,6 +265,22 @@ export default function Home() {
     }
   };
 
+  const retrievesAnswers = () => {
+    
+    const tempArray: Array<string> = []
+
+    selectAnswers?.map(category => {
+      category.questions.map(question => {
+        tempArray.push(question.fiftyFiftyBonus[0])
+        tempArray.push(question.fiftyFiftyBonus[1])
+      })
+    })
+
+    const noDuplicates: Set<string> = new Set(tempArray)
+
+    return Array.from(noDuplicates).sort()
+  }
+
   const modalStyle = {
     position: "absolute" as "absolute",
     top: "50%",
@@ -284,7 +302,7 @@ export default function Home() {
       )}
 
       {isOpenUpload && (
-        <UploadQuestions categories={categories as CategoryType[]} />
+        <UploadQuestions categories={categories as CategoryType[]} setIsOpenUpload={setIsOpenUpload} setHideSelectButtons={setHideSelectButtons}/>
       )}
 
       {isOpenQuiz && (
@@ -372,6 +390,7 @@ export default function Home() {
                 hasFifty={playersTurn.bonus.find(bonus => bonus === "50-50") !== undefined}
                 onSubmitAnswerHandler={onSubmitAnswerHandler}
                 onChangeAnswerHandler={onChangeAnswerHandler}
+                retrievesAnswers={retrievesAnswers}
                 text={text}
                 />
               )}

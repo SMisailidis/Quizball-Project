@@ -1,15 +1,17 @@
-import { Button, FormControl, InputLabel, MenuItem, Select, TextField, Tooltip } from "@mui/material"
+import { Button, FormControl, IconButton, InputLabel, MenuItem, Select, TextField } from "@mui/material"
+import HomeIcon from '@mui/icons-material/Home';
 import styles from "../../styles/UploadQuestions.module.css"
 import { CategoryType } from "../../types/CategoryType"
-import { ChangeEvent, useState } from "react";
+import { useState } from "react";
 import { QuestionsType } from "../../types/QuestionsType";
-import { storage } from "../../firebase-config";
+import { storage } from "../../configs/firebase-config";
 import { ref, uploadBytes} from "firebase/storage"
 
 interface propsType {
     categories: CategoryType[]
+    setIsOpenUpload: (flag: boolean) => void;
+    setHideSelectButtons: (flag: boolean) => void;
 }
-
 
 const UploadQuestions = (props: propsType) => {
     
@@ -21,13 +23,30 @@ const UploadQuestions = (props: propsType) => {
     const [numberTextField, setNumberTextField] = useState(1)
     const [answerTextField, setAnswerTextField] = useState("")
     const [fiftyTextField, setFiftyTextField] = useState("")
+    const [isDisabledQuestion, setIsDisabledQuestion] = useState(false)
     const [isCorrectCategory, setIsCorrectCategory] = useState(true) 
     const [isCorrectQuestion, setIsCorrectQuestion] = useState(true)
     const [isCorrectAnswer, setIsCorrectAnswer] = useState(true)
     const [isCorrectFifty, setIsCorrectFifty] = useState(true)
+    const [label, setLabel] = useState("Select a file")
 
     const regexPattern = /^([\u0300-\u036F]|\d|,|.|-)+[/]([\u0300-\u036F]|\d|,|.|-)+$/;
     const regexFileName = /^([a-zA-Z])+[-]([a-zA-Z])+[-](\d{4})[-]([a-zA-Z])+.png$/
+
+    const resetAll = () => {
+        setCategorySelect("")
+        setQuestionTextField("")
+        setNumberTextField(1)
+        setAnswerTextField("")
+        setFiftyTextField("")
+        setIsDisabledQuestion(false)
+        setIsCorrectCategory(true)
+        setIsCorrectQuestion(true)
+        setIsCorrectAnswer(true)
+        setIsCorrectFifty(true)
+        setSelectedFile(null)
+        setLabel("Select a file")
+    }
 
     const removeTonalMarks = (text: string) => {
         const tonalMarksRegex = /[\u0300-\u036F]/g;
@@ -37,6 +56,20 @@ const UploadQuestions = (props: propsType) => {
     const handleSelectChange = (e: any) => {
         const { value } = e.target
         setCategorySelect(value)
+
+        if(value === "3") {
+            setQuestionTextField("Ποιος λείπει από την ενδεκάδα;")
+            setIsDisabledQuestion(true)
+        }
+        else if (value === "6") {
+            setQuestionTextField("Ποιας ομάδας είναι το λογότυπο;")
+            setIsDisabledQuestion(true)
+        }
+        else {
+            setQuestionTextField("")
+            setIsDisabledQuestion(false)
+        }
+
         setIsCorrectCategory(true)
     }
 
@@ -104,14 +137,13 @@ const UploadQuestions = (props: propsType) => {
             return
         }
 
-
         const obj : QuestionsType = {
             text: questionTextField,
             id: Math.random().toString(),
             difficulty: numberTextField,
             answer: noTonalsAnswer,
             fiftyFiftyBonus: noTonalsFifty,
-            photoURL: null
+            photoURL: selectedFile !== null ? selectedFile.name : null
         }
 
         if(categorySelect === "3") {
@@ -125,25 +157,32 @@ const UploadQuestions = (props: propsType) => {
 
         if(!successPost) {
             setSuccess("success")
+            setTimeout(() => {
+                setSuccess("primary");
+              }, 2000);
         }
         else {
-            setSuccess("error")
         }
     }
 
     const handleFileChange = (e: any) => {
-      const file = e.target.files?.[0];
-  
+      const file = e.target.files?.[0]
+
       if(!file) return
   
       setSelectedFile(file);
+      if(file.name.length >= 30){
+        const truncatedName = file.name.substring(0, 15) + '...';
+        setLabel(truncatedName);
+      } else {
+        setLabel(file.name)
+      }
     };
   
     async function uploadFile() {
         const fileInput = document.getElementById('fileInput') as HTMLInputElement;
         const file = fileInput.files?.[0];
-      
-        console.log(file)
+
         if (!file) {
           return;
         }
@@ -152,9 +191,11 @@ const UploadQuestions = (props: propsType) => {
       
         try {
           await uploadBytes(storageRef, file);
+          alert("Η ερώτηση καθώς και η φωτογραφία ανέβηκαν επιτυχώς!")
         } catch (error) {
             alert('File upload failed. Please try again.');
             console.error(error);
+            setSuccess("error")
         }
     };
 
@@ -168,16 +209,30 @@ const UploadQuestions = (props: propsType) => {
             }
             console.log('Question upload successful!');
             uploadFile()
+            setSuccess("success")
+            setTimeout(() => {
+                setSuccess("primary");
+                resetAll()
+              }, 2000);
             })
             .catch(error => {
                 console.error('Error uploading question:', error);
+                setSuccess("error")
             });        
+    }
+
+    const onClickHandleBack = () => {
+        props.setIsOpenUpload(false)
+        props.setHideSelectButtons(true)
     }
 
     return (
         <div className={styles.card}>
             <div className={styles.outerContainer}>
                 <div className={styles.header}>
+                <IconButton color="inherit" sx={{border: "1px solid black"}} onClick={onClickHandleBack}>
+                    <HomeIcon />
+                </IconButton>
                     <h2>Συμπλήρωσε την φόρμα</h2>
                     <hr />
                 </div>
@@ -205,6 +260,7 @@ const UploadQuestions = (props: propsType) => {
                         label="Δώσε το κείμενο της ερώτησης"
                         variant="outlined"
                         value={questionTextField}
+                        disabled={isDisabledQuestion}
                         onChange={questionTextHandler}
                     />
                     <FormControl sx={{width: "100%"}}>
@@ -243,13 +299,9 @@ const UploadQuestions = (props: propsType) => {
                         onChange={fiftyTextHandler}
                     />
                 </div>
-                {/* <div className={styles.fileInp}>
-                    <input id="fileInput" type="file" onChange={handleFileChange} accept=".png" />
-                </div> */}
-
                 <div className={styles["file-input-container"]}>
                  <label htmlFor="fileInput" className={styles["custom-file-label"]}>
-                    Select a file
+                    {label}
                     <input  onChange={handleFileChange} accept=".png" type="file" id="fileInput"  className={styles["custom-file-input"]}/>
                     </label>
                 </div>

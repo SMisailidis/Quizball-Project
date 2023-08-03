@@ -1,10 +1,10 @@
-import { Button, Modal, TextField, Typography } from "@mui/material";
+import { Autocomplete, Button, Modal, TextField, Typography } from "@mui/material";
 import styles from "../../styles/MainScreen.module.css";
 import { Box } from "@mui/material";
 import { useEffect, useState } from "react";
 import { SelectedItemType } from "../../types/SelectedItemType/SelectedItemType";
-import { initializeApp } from "firebase/app";
-import { getStorage, ref, getDownloadURL } from 'firebase/storage';
+import { storage } from "../../configs/firebase-config";
+import { ref, getDownloadURL } from 'firebase/storage';
 
 interface propsType {
   selectedItem: SelectedItemType;
@@ -13,6 +13,7 @@ interface propsType {
   onSubmitAnswerHandler: () => void;
   setBonus: (bonus: string) => void;
   onChangeAnswerHandler: (text: string) => void;
+  retrievesAnswers: () => string[]
   text: string;
 }
 
@@ -42,11 +43,13 @@ const modalStyleFifty = {
 };
 
 const MainScreen = (props: propsType) => {
+  const [options, setOptions] = useState<string[]>(props.retrievesAnswers)
   const [open, setOpen] = useState(false);
   const [openFifty, setOpenFifty] = useState(false)
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
   const handleClosefiftyModal = () => setOpenFifty(false)
+  const [imageUrl, setImageUrl] = useState<string>();
   
   const path: string | null = props.selectedItem.question.photoURL;
 
@@ -58,24 +61,8 @@ const MainScreen = (props: propsType) => {
   let bonus: any = props.bonus === "x2" ? 2 : 1;
 
 
-  const [imageUrl, setImageUrl] = useState<string>();
-
-  const firebaseConfig = {
-    apiKey: "AIzaSyDN3u-nLXGHHqwgNgs-jlqLXUQ5-CqJGZY",
-    authDomain: "quizball-project.firebaseapp.com",
-    databaseURL: "https://quizball-project-default-rtdb.europe-west1.firebasedatabase.app",
-    projectId: "quizball-project",
-    storageBucket: "quizball-project.appspot.com",
-    messagingSenderId: "642081605780",
-    appId: "1:642081605780:web:7dd71b31e9135595ea0c81",
-    measurementId: "G-NSJ9LYP634"
-  };
-
-  const app = initializeApp(firebaseConfig);
-
   useEffect(() => {
     if(!path) return
-    const storage = getStorage(app);
 
     const storageRef = ref(storage, `images/${path}`);
 
@@ -86,18 +73,17 @@ const MainScreen = (props: propsType) => {
       .catch((error) => {
         console.error('Error downloading the image:', error);
       });
-  }, [path, app]);
+  }, [path]);
 
   const onSubmitAnswerHandler = (e: any) => {
     e.preventDefault();
     props.onSubmitAnswerHandler();
   };
 
-  const onChangeAnswerHandler = (e: any) => {
-    props.onChangeAnswerHandler(e.target.value);
-  };
-
   const retrieveModalText = (teams: string) => {
+
+    if(props.selectedItem.category.id !== "c4") return ""
+
     const tempArray = teams.split("-");
     return (
       tempArray[0] + " vs " + tempArray[1] + " | " + tempArray[2] + " " + tempArray[3].slice(0, -4)
@@ -157,7 +143,7 @@ const MainScreen = (props: propsType) => {
                     </Typography>
                     <img
                       src={imageUrl}
-                      alt="as"
+                      alt="Loading..."
                       width={640}
                       height={400}
                       style={{
@@ -220,26 +206,26 @@ const MainScreen = (props: propsType) => {
           </Modal>
         </div>
         <div className = {styles.answerInput}>
-          <TextField
-            id="outlined-basic"
+          <Autocomplete
+            disablePortal
+            freeSolo
             fullWidth
-            label="Σημπλήρωσε την απάντησή σου εδώ"
-            variant="outlined"
+            id="combo-box-demo"
+            options={options}
             sx={[
-               
               {
                 "& .MuiOutlinedInput-root .MuiOutlinedInput-notchedOutline": {
                   borderColor: `${props.selectedItem.category.bgColor} !important`,
                 },
               },
-              {
-                "& label.Mui-focused": {
-                  color: `${props.selectedItem.category.bgColor} !important`,
-                },
-              },
             ]}
-            value={props.text}
-            onChange={onChangeAnswerHandler}
+            onChange={(event: any, newValue: string | null) => {
+              props.onChangeAnswerHandler(newValue as string)
+            }}
+            onInputChange={(event, newInputValue) => {
+              props.onChangeAnswerHandler(newInputValue);
+            }}
+            renderInput={(params) => <TextField variant="outlined" {...params} label="Σημπλήρωσε την απάντησή σου εδώ" sx={{"& label.Mui-focused": {color: `${props.selectedItem.category.bgColor} !important`,},}}/>}
           />
         </div>
         <Button

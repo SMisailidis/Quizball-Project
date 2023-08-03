@@ -36,10 +36,6 @@ const QuestionsContainer = (props: propsType) => {
   const handleOpenBonus = () => {
     setOpenBonus(true)
   };
-  
-  const onResizeHandler = (e : any) =>{
-
-  }
 
   const onClickBonusHandler = (text: string) => {
     handleCloseBonus();
@@ -52,10 +48,8 @@ const QuestionsContainer = (props: propsType) => {
 
   const onClickHandler = (e: any) => {
     const viewPortWidth = document.documentElement.clientWidth;
-    console.log(viewPortWidth);
-
+    
     let qContainer;
-
     if(viewPortWidth <= 1200){
       qContainer = document.getElementById("container") as HTMLElement;
       qContainer.style.display = "none";
@@ -162,7 +156,6 @@ const QuestionsContainer = (props: propsType) => {
                     >
                       {`x${question.difficulty}`}
                     </Button>
-                    // <button className={styles.button}>dsadasd</button>
                   ))}
                 </div>
               </li>
