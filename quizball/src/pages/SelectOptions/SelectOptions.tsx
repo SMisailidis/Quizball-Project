@@ -5,6 +5,7 @@ interface propsType {
     setIsOpenQuiz: (flag: boolean) => void;
     setIsOpenUpload: (flag: boolean) => void;
     setHideSelectButtons: (flag: boolean) => void;
+    setToggleHome: (flag: boolean) => void;
 }
 
 
@@ -20,6 +21,7 @@ const SelectOptions = (props: propsType) => {
             props.setIsOpenQuiz(true)
         }
         props.setHideSelectButtons(false)
+        props.setToggleHome(true)
     }
 
     return (

@@ -1,5 +1,4 @@
 import { Button, FormControl, IconButton, InputLabel, MenuItem, Select, TextField } from "@mui/material"
-import HomeIcon from '@mui/icons-material/Home';
 import styles from "../../styles/UploadQuestions.module.css"
 import { CategoryType } from "../../types/CategoryType"
 import { useState } from "react";
@@ -230,9 +229,7 @@ const UploadQuestions = (props: propsType) => {
         <div className={styles.card}>
             <div className={styles.outerContainer}>
                 <div className={styles.header}>
-                <IconButton color="inherit" sx={{border: "1px solid black"}} onClick={onClickHandleBack}>
-                    <HomeIcon />
-                </IconButton>
+                
                     <h2>Συμπλήρωσε την φόρμα</h2>
                     <hr />
                 </div>

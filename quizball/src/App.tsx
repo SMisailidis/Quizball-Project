@@ -7,28 +7,30 @@ import { CategoryType } from "./types/CategoryType";
 import { QuestionsType } from "./types/QuestionsType";
 import { Player } from "./classes/Player";
 import { useEffect, useState } from "react";
-import { Box, Button, Modal, TextField, Typography } from "@mui/material";
+import { Box, Button, IconButton, Modal, TextField, Typography } from "@mui/material";
 import UploadQuestions from "./pages/UploadQuestions/UploadQuestions";
 import SelectOptions from "./pages/SelectOptions/SelectOptions";
+import HomeIcon from '@mui/icons-material/Home';
 
 export default function Home() {
   document.title = "Quizball"
   const [categories, setCategories] = useState<CategoryType[]>();
   const [selectAnswers, setSelectAnswers] = useState<CategoryType[]>()
-  const [showScore, setShowScore] = useState(false);
   const [selectedItem, setSelectedItem] = useState<SelectedItemType | undefined>();
-  const [disableButtons, setDisableButtons] = useState(false);
-  const [bonus, setBonus] = useState("");
-  const [text, setText] = useState("");
   const [player1, setPlayer1] = useState<Player | null>(null);
   const [player2, setPlayer2] = useState<Player | null>(null);
   const [playersTurn, setPlayersTurn] = useState<Player | null>(null);
-  const [open, setOpen] = useState(true);
+  const [bonus, setBonus] = useState("");
+  const [text, setText] = useState("");
   const [textName1, setTextName1] = useState("");
   const [textName2, setTextName2] = useState("");
+  const [open, setOpen] = useState(true);
+  const [showScore, setShowScore] = useState(false);
+  const [disableButtons, setDisableButtons] = useState(false);
   const [isOpenQuiz, setIsOpenQuiz] = useState(false)
   const [isOpenUpload, setIsOpenUpload] = useState(false)
   const [hideSelectButtons, setHideSelectButtons] = useState(true)
+  const [toggleHome, setToggleHome] = useState(false)
 
   const removeTonalMarks = (text: string) => {
     const tonalMarksRegex = /[\u0300-\u036F]/g;
@@ -36,30 +38,31 @@ export default function Home() {
   };
 
   useEffect(() => {
-    fetch("https://quizball-project-default-rtdb.europe-west1.firebasedatabase.app/categories.json")
-      .then((response) => response.json())
-      .then((firebaseData) => {
-        if (firebaseData) {
-          const dataArray: CategoryType[] = Object.values(firebaseData);
-
-          const loadedData = []
-          
-          for(const key in dataArray) {
-            loadedData.push({
-              type: dataArray[key].type,
-              id: dataArray[key].id,
-              bgColor: dataArray[key].bgColor,
-              questions: getRandomQuestions(dataArray[key].questions, 3)
-            })
-          }
-          setCategories(loadedData)
-          setSelectAnswers(loadedData)
-        }
-      })
-      .catch((error) => {
-        console.error("Error fetching data:", error);
-      });
+    fetchDataAndProcess(setCategories, setSelectAnswers);
   }, []);
+  
+  const fetchDataAndProcess = async (setCategories: any, setSelectAnswers: any) => {
+    try {
+      const response = await fetch("https://quizball-project-default-rtdb.europe-west1.firebasedatabase.app/categories.json");
+      const firebaseData = await response.json();
+  
+      if (firebaseData) {
+        const dataArray: CategoryType[] = Object.values(firebaseData);
+  
+        const loadedData = dataArray.map((dataItem) => ({
+          type: dataItem.type,
+          id: dataItem.id,
+          bgColor: dataItem.bgColor,
+          questions: getRandomQuestions(dataItem.questions, 3),
+        }));
+  
+        setCategories(loadedData);
+        setSelectAnswers(loadedData);
+      }
+    } catch (error) {
+      console.error("Error fetching data:", error);
+    }
+  };
   
   const getRandomQuestions = (data: QuestionsType[], numQuestions: number) => {
     const dataArray: any[] = Object.values(data); // Convert the object values to an array
@@ -152,6 +155,7 @@ export default function Home() {
     }
 
     const noTonalText = removeTonalMarks(text)
+    setShowScore(true);
 
     if (noTonalText.toUpperCase() === selectedItem.question.answer.toUpperCase()) {
       alert("Congratulations! You got it right!");
@@ -169,7 +173,6 @@ export default function Home() {
         qContainer.style.display = "flex";
 
     checkWinner();
-    setShowScore(true);
     removeQuestion();
     pickTurn();
     setDisableButtons(false);
@@ -281,6 +284,29 @@ export default function Home() {
     return Array.from(noDuplicates).sort()
   }
 
+  const onClickHandleHome = () => {
+    resetAll()
+  }
+
+  const resetAll = () => {
+    setToggleHome(false)
+    setIsOpenQuiz(false)
+    setIsOpenUpload(false)
+    setHideSelectButtons(true)
+    setOpen(true)
+    setShowScore(false)
+    setDisableButtons(false)
+    setSelectedItem(undefined)
+    setPlayersTurn(null)
+    setPlayer1(null)
+    setPlayer2(null)
+    setBonus("")
+    setText("")
+    setTextName1("")
+    setTextName2("")
+    fetchDataAndProcess(setCategories, setSelectAnswers)
+  }
+
   const modalStyle = {
     position: "absolute" as "absolute",
     top: "50%",
@@ -296,9 +322,16 @@ export default function Home() {
   
   return (
     <>
-
+      {toggleHome && (
+        <div className={styles.homeButtonContainer}>
+          <IconButton size="large" color="inherit" sx={{border: "1px solid black"}} onClick={onClickHandleHome}>
+              <HomeIcon />
+          </IconButton>
+      </div>
+      )}
+      
       {hideSelectButtons && (
-        <SelectOptions setIsOpenQuiz={setIsOpenQuiz} setIsOpenUpload={setIsOpenUpload} setHideSelectButtons={setHideSelectButtons} />
+        <SelectOptions setIsOpenQuiz={setIsOpenQuiz} setIsOpenUpload={setIsOpenUpload} setHideSelectButtons={setHideSelectButtons} setToggleHome={setToggleHome}/>
       )}
 
       {isOpenUpload && (
@@ -379,7 +412,8 @@ export default function Home() {
                     component="h2"
                     sx={[{ textAlign: "center" }, { fontSize: "26px" }]}
                     >
-                    Επίλεξε μία κατηγορία
+                    {"Επίλεξε μία κατηγορία\n"}
+                    <p className={styles.playerName}>{playersTurn.name}</p>
                   </Typography>
                 </div>
               ) : (
