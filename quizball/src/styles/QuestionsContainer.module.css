@@ -48,7 +48,7 @@
 }
 
 .outerCategories:hover{
-  scale: 1.05;
+  scale: 1.03;
 }
 
 .buttonContainer {
@@ -80,7 +80,7 @@
 
 .span {
   color: white;
-  
+  cursor: default;
   text-align: center;
   font-size: 1.2rem;
   font-family: "Trebuchet MS", "Lucida Sans Unicode", "Lucida Grande",
