@@ -236,7 +236,7 @@ const UploadQuestions = (props: propsType) => {
                     <h2>Συμπλήρωσε την φόρμα</h2>
                     <hr />
                 </div>
-                <FormControl sx={{width:"60%"}}>
+                <FormControl sx={[{width:"60%"}, {marginBottom: "10px"}]}>
                     <InputLabel id="demo-simple-select-label" error={!isCorrectCategory}>Διάλεξε μία κατηγορία</InputLabel>
                     <Select
                         error={!isCorrectCategory}

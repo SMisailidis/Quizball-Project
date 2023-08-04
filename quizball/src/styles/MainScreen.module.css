@@ -60,6 +60,13 @@
     "Lucida Sans", Arial, sans-serif;
 }
 
+.startingElevenImage{
+  height: auto;
+  width: 100%;
+}
+
+
+
 .answerInput{
   width: 550px;
 }
@@ -94,6 +101,14 @@
     width: 70%;
     
     
+  }
+
+  .startingElevenImage{
+    transition: 1s ease-in-out;
+  }
+
+  .startingElevenImage:hover{
+    scale: 1.5;
   }
 
   .answerInput{

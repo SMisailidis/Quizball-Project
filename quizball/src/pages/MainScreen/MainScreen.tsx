@@ -22,7 +22,7 @@ const modalStyle = {
   top: "50%",
   left: "50%",
   transform: "translate(-50%, -50%)",
-  width: 640,
+  width: "65%",
   bgcolor: "background.paper",
   border: "2px solid #000",
   borderRadius: "40px",
@@ -141,11 +141,11 @@ const MainScreen = (props: propsType) => {
                     >
                       {retrieveModalText(path as string)}
                     </Typography>
-                    <img
+                    <img className={styles.startingElevenImage}
                       src={imageUrl}
                       alt="Loading..."
-                      width={640}
-                      height={400}
+                     
+                      
                       style={{
                         borderRadius: "20px",
                       }}
