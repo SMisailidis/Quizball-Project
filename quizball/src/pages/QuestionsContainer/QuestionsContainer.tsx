@@ -102,7 +102,7 @@ const QuestionsContainer = (props: propsType) => {
             component="h2"
             sx={{ textAlign: "center" }}
           >
-            Θες να επιλέξεις κάποια βοήθεια;
+            Θέλεις να επιλέξεις κάποια βοήθεια;
           </Typography>
           <BonusActions
             onClickBonusHandler={onClickBonusHandler}
@@ -126,7 +126,7 @@ const QuestionsContainer = (props: propsType) => {
                 </span>
                 <div className={styles.buttonContainer}>
                   {category.questions.map((question, index) => (
-                    <Button
+                    <Button 
                       key={index}
                       variant="contained"
                       disabled={props.disableButtons }
@@ -136,7 +136,8 @@ const QuestionsContainer = (props: propsType) => {
                         { backgroundColor: `${category.bgColor}` },
                         {
                           "&:hover": {
-                            backgroundColor: "#98e1e9",
+                            backgroundColor: "#fff",
+                            color:`${category.bgColor}`
                           },
                         },
                         {
@@ -151,6 +152,7 @@ const QuestionsContainer = (props: propsType) => {
                         {
                           width: "8vw",
                         }
+                        
                       ]}
                       onClick={onClickHandler}
                     >

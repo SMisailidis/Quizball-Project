@@ -231,15 +231,15 @@ const MainScreen = (props: propsType) => {
         <Button
           variant="contained"
           sx={[
-            { backgroundColor: "#0497a7" },
+            { backgroundColor: "#347FB1" },
             {
               "&:hover": {
-                backgroundColor: "#6cdbe7",
+                backgroundColor: "#2e6a92",
               },
             },
             {
               marginBottom: "10px",
-            }
+            },
           ]}
           onClick={onSubmitAnswerHandler}
         >

@@ -24,10 +24,10 @@ const BonusActions = (props: PropsType) => {
             variant="contained"
             value={bonus}
             sx={[
-              { backgroundColor: "#00998e" },
+              { backgroundColor: "#03a89c" },
               {
                 "&:hover": {
-                  backgroundColor: "#98e1e9",
+                  backgroundColor: "#00998e",
                 },
               },
               {
@@ -48,10 +48,10 @@ const BonusActions = (props: PropsType) => {
         <Button
           variant="contained"
           sx={[
-            { backgroundColor: "#fb4949" },
+            { backgroundColor: "#c80606" },
             {
               "&:hover": {
-                backgroundColor: "#fd0000",
+                backgroundColor: "#a50000",
               },
             },
             {
@@ -62,7 +62,8 @@ const BonusActions = (props: PropsType) => {
             },
             {
               fontSize: "18px",
-            },
+            }
+           
           ]}
           onClick={onClickBonusHandler}
         >

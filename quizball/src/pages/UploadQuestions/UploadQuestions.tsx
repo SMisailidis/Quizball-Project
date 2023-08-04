@@ -307,7 +307,7 @@ const UploadQuestions = (props: propsType) => {
                 </div>
 
                 <div>
-                    <Button variant="contained" color={success} sx={{width: "100%"}} onClick={handleSubmitQuestion}>Καταχωρησε την ερωτηση</Button>
+                    <Button variant="contained" color={success} sx={[{ width: '100%' }, { backgroundColor: '#347FB1' },{ '&:hover': {backgroundColor: '#2e6a92',}, }, ]} onClick={handleSubmitQuestion}>Καταχωρησε την ερωτηση</Button>
                 </div>
             </div>
         </div>

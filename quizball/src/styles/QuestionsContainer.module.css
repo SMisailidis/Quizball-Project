@@ -1,11 +1,20 @@
 .container {
   display: flex;
   justify-content: center;
-  border-left: 3px solid black;
+  border-left: 2px solid black;
   border-radius: 10px;
   background-color: #d9f1f4;
-  width: 70%;
+  width: 65%;
   padding: 0 50px;
+     box-shadow:
+    4px 4px 6px 0px rgba(0, 0, 0, 0.09),
+    -4px -4px 6px 0px rgba(0, 0, 0,  0.09),
+    8px 8px 12px 0px rgba(0, 0, 0,  0.09),
+    -8px -8px 12px 0px rgba(0, 0, 0,  0.09),
+    12px 12px 18px 0px rgba(0, 0, 0,  0.09),
+    -12px -12px 18px 0px rgba(0, 0, 0,  0.09),
+    16px 16px 24px 0px rgba(68, 172, 247, 0.09),
+    -16px -16px 24px 0px rgba(68, 172, 247, 0.09);
   
 }
 
@@ -15,12 +24,14 @@
   justify-content: space-between;
   width: 100%;
   padding: 0;
-  
-
   list-style: none;
   /* margin-right: 10px; */
   gap: 5px;
 }
+
+
+
+
 
 .innerCategories {
   display: flex;
@@ -51,6 +62,15 @@
   padding: 0px 15px;
   color: white;
 }
+
+/* .pointsBtn{
+
+}
+
+.pointsBtn:hover{
+  background-color: white;
+  color: inherit;
+} */
 
 .span {
   color: white;

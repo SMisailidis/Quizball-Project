@@ -26,11 +26,11 @@ const SelectOptions = (props: propsType) => {
         <div className={styles.card}>
             <div className={styles.outerContainer}>
                 <div className={styles.buttonContainers}>
+                <Button variant="outlined" sx = {{padding: "10px 0"}} value={"play"} onClick={onClickSelectHandler}>
+                        Παιξε τωρα Quizball!
+                    </Button>
                     <Button variant="outlined"  sx = {{padding: "10px 0"}} value={"up"} onClick={onClickSelectHandler}>
                         Ανεβασε τις δικες σου ερωτησεις!
-                    </Button>
-                    <Button variant="outlined" sx = {{padding: "10px 0"}} value={"play"} onClick={onClickSelectHandler}>
-                        Παιξε τωρα Quizball!
                     </Button>
                 </div>
             </div>
