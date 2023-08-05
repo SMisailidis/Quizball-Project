@@ -222,12 +222,7 @@ const UploadQuestions = (props: propsType) => {
                 setSuccess("error")
             });        
     }
-
-    const onClickHandleBack = () => {
-        props.setIsOpenUpload(false)
-        props.setHideSelectButtons(true)
-    }
-
+    
     return (
         
             <div className={[height.bodyFix, height.minHeight].join(' ')}>
@@ -238,7 +233,13 @@ const UploadQuestions = (props: propsType) => {
                     <h2>Συμπλήρωσε την φόρμα</h2>
                     <hr />
                 </div>
-                <FormControl sx={[{width:"60%"}, {marginBottom: "10px"}]}>
+                <FormControl sx={[{width:"60%"}, {marginBottom: "10px"}, {
+                            "& .MuiOutlinedInput-root .MuiOutlinedInput-notchedOutline": 
+                                {
+                                    borderColor: `black !important`,
+                                },
+                            },
+                            {"& label.Mui-focused": {color: `black !important`,}}]}>
                     <InputLabel id="demo-simple-select-label" error={!isCorrectCategory}>Διάλεξε μία κατηγορία</InputLabel>
                     <Select  
                         error={!isCorrectCategory}
@@ -257,7 +258,18 @@ const UploadQuestions = (props: propsType) => {
                     <TextField 
                         required = {isCorrectQuestion}
                         error = {!isCorrectQuestion}
-                        sx={{width: "100%"}}
+                        sx={[
+                            {
+                                width: "100%",
+                            },
+                            {
+                            "& .MuiOutlinedInput-root .MuiOutlinedInput-notchedOutline": 
+                                {
+                                    borderColor: `black !important`,
+                                },
+                            },
+                            {"& label.Mui-focused": {color: `black !important`,}}
+                        ]}
                         id="outlined-basic"
                         label="Δώσε το κείμενο της ερώτησης"
                         variant="outlined"
@@ -265,7 +277,18 @@ const UploadQuestions = (props: propsType) => {
                         disabled={isDisabledQuestion}
                         onChange={questionTextHandler}
                     />
-                    <FormControl  sx={{width: "100%"}}>
+                    <FormControl  sx={[
+                            {
+                                width: "100%",
+                            },
+                            {
+                            "& .MuiOutlinedInput-root .MuiOutlinedInput-notchedOutline": 
+                                {
+                                    borderColor: `black !important`,
+                                },
+                            },
+                            {"& label.Mui-focused": {color: `black !important`,}}
+                        ]}>
                         <InputLabel id="demo-simple-select-label">Δώσε την δυσκολία της ερώτησης</InputLabel>
                         <Select
                             labelId="demo-simple-select-label"
@@ -282,7 +305,18 @@ const UploadQuestions = (props: propsType) => {
                     <TextField
                         required = {isCorrectAnswer}
                         error = {!isCorrectAnswer}
-                        sx={{width: "100%"}}
+                        sx={[
+                            {
+                                width: "100%",
+                            },
+                            {
+                            "& .MuiOutlinedInput-root .MuiOutlinedInput-notchedOutline": 
+                                {
+                                    borderColor: `black !important`,
+                                },
+                            },
+                            {"& label.Mui-focused": {color: `black !important`,}}
+                        ]}
                         id="outlined-basic"
                         label="Δώσε την απάντηση της ερώτησης"
                         variant="outlined"
@@ -292,7 +326,18 @@ const UploadQuestions = (props: propsType) => {
                     <TextField
                         required = {isCorrectFifty}
                         error = {!isCorrectFifty}
-                        sx={{width: "100%"}}
+                        sx={[
+                            {
+                                width: "100%",
+                            },
+                            {
+                            "& .MuiOutlinedInput-root .MuiOutlinedInput-notchedOutline": 
+                                {
+                                    borderColor: `black !important`,
+                                },
+                            },
+                            {"& label.Mui-focused": {color: `black !important`,}}
+                        ]}
                         id="standard-helperText"
                         label="Δώσε την βοήθεια 50-50"
                         variant="outlined"

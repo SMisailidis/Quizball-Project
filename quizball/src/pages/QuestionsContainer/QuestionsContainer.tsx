@@ -94,7 +94,7 @@ const QuestionsContainer = (props: propsType) => {
     <>
     <div>
       <Modal
-        open={openBonus} sx={{overflow:"scroll"}}
+        open={openBonus}
         aria-labelledby="modal-modal-title"
         aria-describedby="modal-modal-description"
       >

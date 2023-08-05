@@ -326,11 +326,6 @@ export default function Home() {
   
   return (
     <>
-
-  
-
-
-      
       {hideSelectButtons && (
         <SelectOptions setIsOpenQuiz={setIsOpenQuiz} setIsOpenUpload={setIsOpenUpload} setHideSelectButtons={setHideSelectButtons} setToggleHome={setToggleHome}/>
       )}
