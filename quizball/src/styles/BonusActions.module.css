@@ -1,8 +1,12 @@
-.outerContainer {
+.outterContainer {
   display: flex;
   align-items: center;
   justify-content: center;
   border-radius: 100px;
+  height: 100%;
+  overflow: scroll;
+  
+  
 }
 
 .buttonContainer {

@@ -37,5 +37,6 @@ body{
     border-bottom-right-radius: 25px;
     overflow: hidden;
     width: 55%;
-    height: 30%;
+    height: auto;
+    padding: 20px 0;
 }

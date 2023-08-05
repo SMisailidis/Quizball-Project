@@ -1,7 +1,7 @@
 import { Autocomplete, Button, Modal, TextField, Typography } from "@mui/material";
 import styles from "../../styles/MainScreen.module.css";
 import { Box } from "@mui/material";
-import { useEffect, useState } from "react";
+import { ReactNode, useEffect, useState } from "react";
 import { SelectedItemType } from "../../types/SelectedItemType/SelectedItemType";
 import { storage } from "../../configs/firebase-config";
 import { ref, getDownloadURL } from 'firebase/storage';
@@ -91,7 +91,10 @@ const MainScreen = (props: propsType) => {
   };
 
   return (
+    
+   
     <div className={styles.outerMainScreen}>
+    
       <div className={styles.container}>
         <header>
           <h1 className={styles["animated-text"]}>QUIZBALL</h1>
@@ -109,6 +112,7 @@ const MainScreen = (props: propsType) => {
             
           </div>
           <main className={styles.questionText}>
+          
             <span>{props.selectedItem.question.text}</span>
             {imageUrl && (
               <>
@@ -247,6 +251,7 @@ const MainScreen = (props: propsType) => {
         </Button>
       </div>
     </div>
+  
   );
 };
 

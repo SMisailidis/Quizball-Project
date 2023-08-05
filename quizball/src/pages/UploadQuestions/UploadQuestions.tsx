@@ -1,12 +1,15 @@
 import { Button, FormControl, IconButton, InputLabel, MenuItem, Select, TextField } from "@mui/material"
 import styles from "../../styles/UploadQuestions.module.css"
+import height from "../../styles/scrollOnHeightResizeFix.module.css"
 import { CategoryType } from "../../types/CategoryType"
-import { useState } from "react";
+import { ReactNode, useState } from "react";
 import { QuestionsType } from "../../types/QuestionsType";
 import { storage } from "../../configs/firebase-config";
 import { ref, uploadBytes} from "firebase/storage"
 
+
 interface propsType {
+    children: ReactNode
     categories: CategoryType[]
     setIsOpenUpload: (flag: boolean) => void;
     setHideSelectButtons: (flag: boolean) => void;
@@ -226,8 +229,10 @@ const UploadQuestions = (props: propsType) => {
     }
 
     return (
-        <div className={styles.card}>
-            <div className={styles.outerContainer}>
+        
+            <div className={[height.bodyFix, height.minHeight].join(' ')}>
+                {props.children}
+                <div className={styles.outerContainer}>
                 <div className={styles.header}>
                 
                     <h2>Συμπλήρωσε την φόρμα</h2>
@@ -235,7 +240,7 @@ const UploadQuestions = (props: propsType) => {
                 </div>
                 <FormControl sx={[{width:"60%"}, {marginBottom: "10px"}]}>
                     <InputLabel id="demo-simple-select-label" error={!isCorrectCategory}>Διάλεξε μία κατηγορία</InputLabel>
-                    <Select
+                    <Select  
                         error={!isCorrectCategory}
                         labelId="demo-simple-select-label"
                         id="demo-simple-select"
@@ -249,7 +254,7 @@ const UploadQuestions = (props: propsType) => {
                     </Select>
                 </FormControl>
                 <div className={styles.textFieldsContainer}>
-                    <TextField
+                    <TextField 
                         required = {isCorrectQuestion}
                         error = {!isCorrectQuestion}
                         sx={{width: "100%"}}
@@ -260,7 +265,7 @@ const UploadQuestions = (props: propsType) => {
                         disabled={isDisabledQuestion}
                         onChange={questionTextHandler}
                     />
-                    <FormControl sx={{width: "100%"}}>
+                    <FormControl  sx={{width: "100%"}}>
                         <InputLabel id="demo-simple-select-label">Δώσε την δυσκολία της ερώτησης</InputLabel>
                         <Select
                             labelId="demo-simple-select-label"
@@ -308,6 +313,9 @@ const UploadQuestions = (props: propsType) => {
                 </div>
             </div>
         </div>
+            
+            
+        
     )
 }
 

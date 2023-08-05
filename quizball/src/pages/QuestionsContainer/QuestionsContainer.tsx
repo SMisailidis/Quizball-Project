@@ -1,4 +1,5 @@
 import styles from "../../styles/QuestionsContainer.module.css";
+import heights from "../../styles/scrollOnHeightResizeFix.module.css";
 import { CategoryType } from "../../types/CategoryType";
 import { Box, Button, Modal, Typography } from "@mui/material";
 import BonusActions from "../BonusActions/BonusActions";
@@ -25,6 +26,7 @@ const modalStyle = {
   borderRadius: "40px",
   boxShadow: 24,
   p: 4,
+  
 };
 
 const QuestionsContainer = (props: propsType) => {
@@ -90,8 +92,9 @@ const QuestionsContainer = (props: propsType) => {
 
   return (
     <>
+    <div>
       <Modal
-        open={openBonus}
+        open={openBonus} sx={{overflow:"scroll"}}
         aria-labelledby="modal-modal-title"
         aria-describedby="modal-modal-description"
       >
@@ -110,6 +113,7 @@ const QuestionsContainer = (props: propsType) => {
           />
         </Box>
       </Modal>
+      </div>
       <div className={styles.container} id="container">
         <ul className={styles.list}>
           {categories.map((category, index) => (

@@ -1,4 +1,5 @@
 import styles from "./styles/main.module.css";
+import heights from "./styles/scrollOnHeightResizeFix.module.css"
 import QuestionsContainer from "./pages/QuestionsContainer/QuestionsContainer";
 import ShowScore from "./pages/ShowScore/ShowScore";
 import MainScreen from "./pages/MainScreen/MainScreen";
@@ -308,48 +309,53 @@ export default function Home() {
   }
 
   const modalStyle = {
-    position: "absolute" as "absolute",
-    top: "50%",
-    left: "50%",
-    transform: "translate(-50%, -50%)",
+    display: "flex",
+    flexDirection:"column",
     width: "55%",
     bgcolor: "background.paper",
     border: "2px solid #000",
     borderRadius: "40px",
     boxShadow: 24,
-    p: 4,
+    p: 5,
+    overflow: "scroll",
+  };
+
+  const disableScrollbar = {
+    scrollbarWidth: "none",
   };
   
   return (
     <>
-      {toggleHome && (
-        <div className={styles.homeButtonContainer}>
-          <IconButton size="large" color="inherit" sx={{border: "1px solid black"}} onClick={onClickHandleHome}>
-              <HomeIcon />
-          </IconButton>
-      </div>
-      )}
+
+  
+
+
       
       {hideSelectButtons && (
         <SelectOptions setIsOpenQuiz={setIsOpenQuiz} setIsOpenUpload={setIsOpenUpload} setHideSelectButtons={setHideSelectButtons} setToggleHome={setToggleHome}/>
       )}
 
       {isOpenUpload && (
-        <UploadQuestions categories={categories as CategoryType[]} setIsOpenUpload={setIsOpenUpload} setHideSelectButtons={setHideSelectButtons}/>
+        <UploadQuestions categories={categories as CategoryType[]} setIsOpenUpload={setIsOpenUpload} setHideSelectButtons={setHideSelectButtons}><div className={styles.homeButtonContainer}>
+        <IconButton size="large" color="inherit" sx={{border: "1px solid black"}} onClick={onClickHandleHome}>
+            <HomeIcon />
+        </IconButton>
+    </div></UploadQuestions>
       )}
 
       {isOpenQuiz && (
-        <Modal
+        <Modal 
           open={open}
           aria-labelledby="modal-modal-title"
           aria-describedby="modal-modal-description"
         >
-        <Box sx={modalStyle}>
+      <div className={heights.bodyFix}>
+        <Box  sx={[modalStyle,disableScrollbar,{height:"30%"}]}>
           <Typography
             id="modal-modal-title"
             variant="h6"
             component="h2"
-            sx={[{ textAlign: "center" }, { paddingBottom: "10px" }]}
+            sx={[{ textAlign: "center" }, { paddingBottom: "10px" },]}
           >
             Εισάγεται τα ονόματα των 2 παιχτών
             <hr />
@@ -387,6 +393,7 @@ export default function Home() {
             </Button>
           </div>
         </Box>
+      </div>
         </Modal>
       )}
       
@@ -401,7 +408,13 @@ export default function Home() {
 
       {(playersTurn !== null) && 
        <>
+        <div className={styles.homeButtonContainer}>
+        <IconButton size="large" color="inherit" sx={{border: "1px solid black"}} onClick={onClickHandleHome}>
+            <HomeIcon />
+        </IconButton>
+        </div>
        <div className={styles.outerMainScreen}>
+       
           <div className={styles.innerMainContainer}>
             <div className={styles.innerMain}>
               {!selectedItem ? (
@@ -417,6 +430,7 @@ export default function Home() {
                   </Typography>
                 </div>
               ) : (
+                <>
                 <MainScreen
                 selectedItem={selectedItem}
                 bonus={bonus}
@@ -427,6 +441,9 @@ export default function Home() {
                 retrievesAnswers={retrievesAnswers}
                 text={text}
                 />
+                
+           
+           </>
               )}
               {categories && 
                 <QuestionsContainer
@@ -443,6 +460,10 @@ export default function Home() {
         </div>
         </>
       }
-    </>
+    
+
+      
+
+      </>
   );
 }
