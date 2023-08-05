@@ -34,7 +34,6 @@ const modalStyle = {
 };
 
 const ShowScore = (props: PropsType) => {
-
   const handleClose = () => props.setShowScore(false);
 
   useEffect(() => {
@@ -67,35 +66,35 @@ const ShowScore = (props: PropsType) => {
         aria-describedby="modal-modal-description"
       >
         <Box sx={modalStyle}>
-          {(props.player1 !== null && props.player2 !== null) &&
+          {props.player1 !== null && props.player2 !== null && (
             <TableContainer component={Paper} sx={[{ borderRadius: "20px" }]}>
-            <Table aria-label="simple table">
-              <TableHead>
-                <TableRow>
-                  <TableCell align="center" sx={{ fontSize: "20px" }}>
-                    {props.player1.name}
-                  </TableCell>
-                  <TableCell align="center" sx={{ fontSize: "20px" }}>
-                    {props.player2.name}
-                  </TableCell>
-                </TableRow>
-              </TableHead>
-              <TableBody>
-                <TableRow
-                  sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
-                >
-                  <TableCell align="center" sx={{ fontSize: "20px" }}>
-                    {props.player1.score}
-                  </TableCell>
+              <Table aria-label="simple table">
+                <TableHead>
+                  <TableRow>
+                    <TableCell align="center" sx={{ fontSize: "20px" }}>
+                      {props.player1.name}
+                    </TableCell>
+                    <TableCell align="center" sx={{ fontSize: "20px" }}>
+                      {props.player2.name}
+                    </TableCell>
+                  </TableRow>
+                </TableHead>
+                <TableBody>
+                  <TableRow
+                    sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
+                  >
+                    <TableCell align="center" sx={{ fontSize: "20px" }}>
+                      {props.player1.score}
+                    </TableCell>
 
-                  <TableCell align="center" sx={{ fontSize: "20px" }}>
-                    {props.player2.score}
-                  </TableCell>
-                </TableRow>
-              </TableBody>
-            </Table>
-          </TableContainer>
-          }
+                    <TableCell align="center" sx={{ fontSize: "20px" }}>
+                      {props.player2.score}
+                    </TableCell>
+                  </TableRow>
+                </TableBody>
+              </Table>
+            </TableContainer>
+          )}
         </Box>
       </Modal>
     </>

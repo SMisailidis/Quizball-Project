@@ -1,43 +1,50 @@
-import { Button } from "@mui/material"
-import styles from "../../styles/SelectOptions.module.css"
+import { Button } from "@mui/material";
+import styles from "../../styles/SelectOptions.module.css";
 
 interface propsType {
-    setIsOpenQuiz: (flag: boolean) => void;
-    setIsOpenUpload: (flag: boolean) => void;
-    setHideSelectButtons: (flag: boolean) => void;
-    setToggleHome: (flag: boolean) => void;
+  setIsOpenQuiz: (flag: boolean) => void;
+  setIsOpenUpload: (flag: boolean) => void;
+  setHideSelectButtons: (flag: boolean) => void;
+  setToggleHome: (flag: boolean) => void;
 }
-
 
 const SelectOptions = (props: propsType) => {
+  const onClickSelectHandler = (e: any) => {
+    const clicked = e.target.value;
 
-    const onClickSelectHandler = (e: any) => {
-        const clicked = e.target.value
-
-        if (clicked === "up") {
-            props.setIsOpenUpload(true)
-        }
-        else {
-            props.setIsOpenQuiz(true)
-        }
-        props.setHideSelectButtons(false)
-        props.setToggleHome(true)
+    if (clicked === "up") {
+      props.setIsOpenUpload(true);
+    } else {
+      props.setIsOpenQuiz(true);
     }
+    props.setHideSelectButtons(false);
+    props.setToggleHome(true);
+  };
 
-    return (
-        <div className={styles.card}>
-            <div className={styles.outerContainer}>
-                <div className={styles.buttonContainers}>
-                <Button variant="outlined" sx = {{padding: "10px 0"}} value={"play"} onClick={onClickSelectHandler}>
-                        Παιξε τωρα Quizball!
-                    </Button>
-                    <Button variant="outlined"  sx = {{padding: "10px 0"}} value={"up"} onClick={onClickSelectHandler}>
-                        Ανεβασε τις δικες σου ερωτησεις!
-                    </Button>
-                </div>
-            </div>
+  return (
+    <div className={styles.card}>
+      <div className={styles.outerContainer}>
+        <div className={styles.buttonContainers}>
+          <Button
+            variant="outlined"
+            sx={{ padding: "10px 0" }}
+            value={"play"}
+            onClick={onClickSelectHandler}
+          >
+            Παιξε τωρα Quizball!
+          </Button>
+          <Button
+            variant="outlined"
+            sx={{ padding: "10px 0" }}
+            value={"up"}
+            onClick={onClickSelectHandler}
+          >
+            Ανεβασε τις δικες σου ερωτησεις!
+          </Button>
         </div>
-    )
-}
+      </div>
+    </div>
+  );
+};
 
-export default SelectOptions
+export default SelectOptions;

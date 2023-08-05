@@ -1,10 +1,16 @@
-import { Autocomplete, Button, Modal, TextField, Typography } from "@mui/material";
+import {
+  Autocomplete,
+  Button,
+  Modal,
+  TextField,
+  Typography,
+} from "@mui/material";
 import styles from "../../styles/MainScreen.module.css";
 import { Box } from "@mui/material";
 import { ReactNode, useEffect, useState } from "react";
 import { SelectedItemType } from "../../types/SelectedItemType/SelectedItemType";
 import { storage } from "../../configs/firebase-config";
-import { ref, getDownloadURL } from 'firebase/storage';
+import { ref, getDownloadURL } from "firebase/storage";
 
 interface propsType {
   selectedItem: SelectedItemType;
@@ -13,7 +19,7 @@ interface propsType {
   onSubmitAnswerHandler: () => void;
   setBonus: (bonus: string) => void;
   onChangeAnswerHandler: (text: string) => void;
-  retrievesAnswers: () => string[]
+  retrievesAnswers: () => string[];
   text: string;
 }
 
@@ -43,26 +49,25 @@ const modalStyleFifty = {
 };
 
 const MainScreen = (props: propsType) => {
-  const [options, setOptions] = useState<string[]>(props.retrievesAnswers)
+  const [options, setOptions] = useState<string[]>(props.retrievesAnswers);
   const [open, setOpen] = useState(false);
-  const [openFifty, setOpenFifty] = useState(false)
+  const [openFifty, setOpenFifty] = useState(false);
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
-  const handleClosefiftyModal = () => setOpenFifty(false)
+  const handleClosefiftyModal = () => setOpenFifty(false);
   const [imageUrl, setImageUrl] = useState<string>();
-  
+
   const path: string | null = props.selectedItem.question.photoURL;
 
   const handleOpenfiftyModal = () => {
-    props.setBonus("50-50")
-    setOpenFifty(true)
-  }
+    props.setBonus("50-50");
+    setOpenFifty(true);
+  };
 
   let bonus: any = props.bonus === "x2" ? 2 : 1;
 
-
   useEffect(() => {
-    if(!path) return
+    if (!path) return;
 
     const storageRef = ref(storage, `images/${path}`);
 
@@ -71,7 +76,7 @@ const MainScreen = (props: propsType) => {
         setImageUrl(url);
       })
       .catch((error) => {
-        console.error('Error downloading the image:', error);
+        console.error("Error downloading the image:", error);
       });
   }, [path]);
 
@@ -81,20 +86,22 @@ const MainScreen = (props: propsType) => {
   };
 
   const retrieveModalText = (teams: string) => {
-
-    if(props.selectedItem.category.id !== "c4") return ""
+    if (props.selectedItem.category.id !== "c4") return "";
 
     const tempArray = teams.split("-");
     return (
-      tempArray[0] + " vs " + tempArray[1] + " | " + tempArray[2] + " " + tempArray[3].slice(0, -4)
+      tempArray[0] +
+      " vs " +
+      tempArray[1] +
+      " | " +
+      tempArray[2] +
+      " " +
+      tempArray[3].slice(0, -4)
     );
   };
 
   return (
-    
-   
     <div className={styles.outerMainScreen}>
-    
       <div className={styles.container}>
         <header>
           <h1 className={styles["animated-text"]}>QUIZBALL</h1>
@@ -104,15 +111,18 @@ const MainScreen = (props: propsType) => {
           style={{ borderColor: props.selectedItem.category.bgColor }}
         >
           <div className={styles.header}>
-            <h1 style={{ color: props.selectedItem.category.bgColor, borderBottom: " 2px solid black" }}>
+            <h1
+              style={{
+                color: props.selectedItem.category.bgColor,
+                borderBottom: " 2px solid black",
+              }}
+            >
               {props.selectedItem.category.type}
               {" x"}
               {props.selectedItem.question.difficulty * bonus}
             </h1>
-            
           </div>
           <main className={styles.questionText}>
-          
             <span>{props.selectedItem.question.text}</span>
             {imageUrl && (
               <>
@@ -145,11 +155,10 @@ const MainScreen = (props: propsType) => {
                     >
                       {retrieveModalText(path as string)}
                     </Typography>
-                    <img className={styles.startingElevenImage}
+                    <img
+                      className={styles.startingElevenImage}
                       src={imageUrl}
                       alt="Loading..."
-                     
-                      
                       style={{
                         borderRadius: "20px",
                       }}
@@ -159,20 +168,22 @@ const MainScreen = (props: propsType) => {
               </>
             )}
           </main>
-          {props.hasFifty && <Button
-            sx={[
-              {
-                border: `1px solid ${props.selectedItem.category.bgColor}`,
-              },
-              { borderRadius: "20px" },
-              {
-                color: `${props.selectedItem.category.bgColor} !important`,
-              },
-            ]}
-            onClick={handleOpenfiftyModal}
-          >
-            50-50?
-          </Button>}
+          {props.hasFifty && (
+            <Button
+              sx={[
+                {
+                  border: `1px solid ${props.selectedItem.category.bgColor}`,
+                },
+                { borderRadius: "20px" },
+                {
+                  color: `${props.selectedItem.category.bgColor} !important`,
+                },
+              ]}
+              onClick={handleOpenfiftyModal}
+            >
+              50-50?
+            </Button>
+          )}
           <Modal
             open={openFifty}
             onClose={handleClosefiftyModal}
@@ -180,36 +191,36 @@ const MainScreen = (props: propsType) => {
             aria-describedby="modal-modal-description"
           >
             <Box sx={modalStyleFifty}>
-                {props.selectedItem.question.fiftyFiftyBonus.map(
-                  (answer, index) => (
-                    <Box
-                      key={index}
-                      sx={[
-                        {
-                          border: `3px solid ${props.selectedItem.category.bgColor}`,
-                        },
-                        { borderRadius: "20px" },
-                        {marginBottom: "5px"},
-                        {
-                          padding:"0 8px 0 8px"
-                        }
-                      ]}
+              {props.selectedItem.question.fiftyFiftyBonus.map(
+                (answer, index) => (
+                  <Box
+                    key={index}
+                    sx={[
+                      {
+                        border: `3px solid ${props.selectedItem.category.bgColor}`,
+                      },
+                      { borderRadius: "20px" },
+                      { marginBottom: "5px" },
+                      {
+                        padding: "0 8px 0 8px",
+                      },
+                    ]}
+                  >
+                    <Typography
+                      id="modal-modal-title"
+                      variant="h6"
+                      component="h2"
+                      sx={[{ textAlign: "center" }, { p: 0.5 }]}
                     >
-                      <Typography
-                        id="modal-modal-title"
-                        variant="h6"
-                        component="h2"
-                        sx={[{ textAlign: "center" }, { p: 0.5 }]}
-                      >
-                        {index + 1}. {answer}
-                      </Typography>
-                    </Box>
-                  )
-                )}
+                      {index + 1}. {answer}
+                    </Typography>
+                  </Box>
+                )
+              )}
             </Box>
           </Modal>
         </div>
-        <div className = {styles.answerInput}>
+        <div className={styles.answerInput}>
           <Autocomplete
             disablePortal
             freeSolo
@@ -224,12 +235,23 @@ const MainScreen = (props: propsType) => {
               },
             ]}
             onChange={(event: any, newValue: string | null) => {
-              props.onChangeAnswerHandler(newValue as string)
+              props.onChangeAnswerHandler(newValue as string);
             }}
             onInputChange={(event, newInputValue) => {
               props.onChangeAnswerHandler(newInputValue);
             }}
-            renderInput={(params) => <TextField variant="outlined" {...params} label="Σημπλήρωσε την απάντησή σου εδώ" sx={{"& label.Mui-focused": {color: `${props.selectedItem.category.bgColor} !important`,},}}/>}
+            renderInput={(params) => (
+              <TextField
+                variant="outlined"
+                {...params}
+                label="Σημπλήρωσε την απάντησή σου εδώ"
+                sx={{
+                  "& label.Mui-focused": {
+                    color: `${props.selectedItem.category.bgColor} !important`,
+                  },
+                }}
+              />
+            )}
           />
         </div>
         <Button
@@ -251,7 +273,6 @@ const MainScreen = (props: propsType) => {
         </Button>
       </div>
     </div>
-  
   );
 };
 

@@ -26,37 +26,34 @@ const modalStyle = {
   borderRadius: "40px",
   boxShadow: 24,
   p: 4,
-  
 };
 
 const QuestionsContainer = (props: propsType) => {
   const categories: CategoryType[] = props.categories;
   const [openBonus, setOpenBonus] = useState(false);
   const handleCloseBonus = () => setOpenBonus(false);
-  const [obj, setObj] = useState<SelectedItemType | undefined>()
-  
+  const [obj, setObj] = useState<SelectedItemType | undefined>();
+
   const handleOpenBonus = () => {
-    setOpenBonus(true)
+    setOpenBonus(true);
   };
 
   const onClickBonusHandler = (text: string) => {
     handleCloseBonus();
 
-    onClickQuestionHandler(obj as SelectedItemType)
+    onClickQuestionHandler(obj as SelectedItemType);
 
-    if(text !== "")
-      props.onClickBonusHandler(text);
+    if (text !== "") props.onClickBonusHandler(text);
   };
 
   const onClickHandler = (e: any) => {
     const viewPortWidth = document.documentElement.clientWidth;
-    
+
     let qContainer;
-    if(viewPortWidth <= 1200){
+    if (viewPortWidth <= 1200) {
       qContainer = document.getElementById("container") as HTMLElement;
       qContainer.style.display = "none";
     }
-       
 
     e.preventDefault();
 
@@ -74,7 +71,7 @@ const QuestionsContainer = (props: propsType) => {
     setObj({
       category: categories[categoryIndex],
       question: categories[categoryIndex].questions[questionIndex],
-    })
+    });
 
     handleOpenBonus();
 
@@ -83,7 +80,7 @@ const QuestionsContainer = (props: propsType) => {
 
   const onClickQuestionHandler = (obj: SelectedItemType) => {
     props.onClickQuestionHandler(obj);
-  }
+  };
 
   const findIndex = (id: string, obj: Array<any>) => {
     const index = obj.findIndex((obj) => obj.id === id);
@@ -92,27 +89,27 @@ const QuestionsContainer = (props: propsType) => {
 
   return (
     <>
-    <div>
-      <Modal
-        open={openBonus}
-        aria-labelledby="modal-modal-title"
-        aria-describedby="modal-modal-description"
-      >
-        <Box sx={modalStyle}>
-          <Typography
-            id="modal-modal-title"
-            variant="h6"
-            component="h2"
-            sx={{ textAlign: "center" }}
-          >
-            Θέλεις να επιλέξεις κάποια βοήθεια;
-          </Typography>
-          <BonusActions
-            onClickBonusHandler={onClickBonusHandler}
-            bonuses={props.bonuses}
-          />
-        </Box>
-      </Modal>
+      <div>
+        <Modal
+          open={openBonus}
+          aria-labelledby="modal-modal-title"
+          aria-describedby="modal-modal-description"
+        >
+          <Box sx={modalStyle}>
+            <Typography
+              id="modal-modal-title"
+              variant="h6"
+              component="h2"
+              sx={{ textAlign: "center" }}
+            >
+              Θέλεις να επιλέξεις κάποια βοήθεια;
+            </Typography>
+            <BonusActions
+              onClickBonusHandler={onClickBonusHandler}
+              bonuses={props.bonuses}
+            />
+          </Box>
+        </Modal>
       </div>
       <div className={styles.container} id="container">
         <ul className={styles.list}>
@@ -130,10 +127,10 @@ const QuestionsContainer = (props: propsType) => {
                 </span>
                 <div className={styles.buttonContainer}>
                   {category.questions.map((question, index) => (
-                    <Button 
+                    <Button
                       key={index}
                       variant="contained"
-                      disabled={props.disableButtons }
+                      disabled={props.disableButtons}
                       id={`${category.id} ${question.id}`}
                       value={question.difficulty}
                       sx={[
@@ -141,7 +138,7 @@ const QuestionsContainer = (props: propsType) => {
                         {
                           "&:hover": {
                             backgroundColor: "#fff",
-                            color:`${category.bgColor}`
+                            color: `${category.bgColor}`,
                           },
                         },
                         {
@@ -155,8 +152,7 @@ const QuestionsContainer = (props: propsType) => {
                         },
                         {
                           width: "8vw",
-                        }
-                        
+                        },
                       ]}
                       onClick={onClickHandler}
                     >

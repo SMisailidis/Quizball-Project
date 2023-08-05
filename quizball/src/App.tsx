@@ -1,5 +1,5 @@
 import styles from "./styles/main.module.css";
-import heights from "./styles/scrollOnHeightResizeFix.module.css"
+import heights from "./styles/scrollOnHeightResizeFix.module.css";
 import QuestionsContainer from "./pages/QuestionsContainer/QuestionsContainer";
 import ShowScore from "./pages/ShowScore/ShowScore";
 import MainScreen from "./pages/MainScreen/MainScreen";
@@ -8,16 +8,25 @@ import { CategoryType } from "./types/CategoryType";
 import { QuestionsType } from "./types/QuestionsType";
 import { Player } from "./classes/Player";
 import { useEffect, useState } from "react";
-import { Box, Button, IconButton, Modal, TextField, Typography } from "@mui/material";
+import {
+  Box,
+  Button,
+  IconButton,
+  Modal,
+  TextField,
+  Typography,
+} from "@mui/material";
 import UploadQuestions from "./pages/UploadQuestions/UploadQuestions";
 import SelectOptions from "./pages/SelectOptions/SelectOptions";
-import HomeIcon from '@mui/icons-material/Home';
+import HomeIcon from "@mui/icons-material/Home";
 
 export default function Home() {
-  document.title = "Quizball"
+  document.title = "Quizball";
   const [categories, setCategories] = useState<CategoryType[]>();
-  const [selectAnswers, setSelectAnswers] = useState<CategoryType[]>()
-  const [selectedItem, setSelectedItem] = useState<SelectedItemType | undefined>();
+  const [selectAnswers, setSelectAnswers] = useState<CategoryType[]>();
+  const [selectedItem, setSelectedItem] = useState<
+    SelectedItemType | undefined
+  >();
   const [player1, setPlayer1] = useState<Player | null>(null);
   const [player2, setPlayer2] = useState<Player | null>(null);
   const [playersTurn, setPlayersTurn] = useState<Player | null>(null);
@@ -28,10 +37,10 @@ export default function Home() {
   const [open, setOpen] = useState(true);
   const [showScore, setShowScore] = useState(false);
   const [disableButtons, setDisableButtons] = useState(false);
-  const [isOpenQuiz, setIsOpenQuiz] = useState(false)
-  const [isOpenUpload, setIsOpenUpload] = useState(false)
-  const [hideSelectButtons, setHideSelectButtons] = useState(true)
-  const [toggleHome, setToggleHome] = useState(false)
+  const [isOpenQuiz, setIsOpenQuiz] = useState(false);
+  const [isOpenUpload, setIsOpenUpload] = useState(false);
+  const [hideSelectButtons, setHideSelectButtons] = useState(true);
+  const [toggleHome, setToggleHome] = useState(false);
 
   const removeTonalMarks = (text: string) => {
     const tonalMarksRegex = /[\u0300-\u036F]/g;
@@ -41,22 +50,27 @@ export default function Home() {
   useEffect(() => {
     fetchDataAndProcess(setCategories, setSelectAnswers);
   }, []);
-  
-  const fetchDataAndProcess = async (setCategories: any, setSelectAnswers: any) => {
+
+  const fetchDataAndProcess = async (
+    setCategories: any,
+    setSelectAnswers: any
+  ) => {
     try {
-      const response = await fetch("https://quizball-project-default-rtdb.europe-west1.firebasedatabase.app/categories.json");
+      const response = await fetch(
+        "https://quizball-project-default-rtdb.europe-west1.firebasedatabase.app/categories.json"
+      );
       const firebaseData = await response.json();
-  
+
       if (firebaseData) {
         const dataArray: CategoryType[] = Object.values(firebaseData);
-  
+
         const loadedData = dataArray.map((dataItem) => ({
           type: dataItem.type,
           id: dataItem.id,
           bgColor: dataItem.bgColor,
           questions: getRandomQuestions(dataItem.questions, 3),
         }));
-  
+
         setCategories(loadedData);
         setSelectAnswers(loadedData);
       }
@@ -64,10 +78,10 @@ export default function Home() {
       console.error("Error fetching data:", error);
     }
   };
-  
+
   const getRandomQuestions = (data: QuestionsType[], numQuestions: number) => {
     const dataArray: any[] = Object.values(data); // Convert the object values to an array
-    const shuffledArray = shuffleArray(dataArray)
+    const shuffledArray = shuffleArray(dataArray);
 
     const selectedQuestions: any[] = [];
     const difficultyQuestions: any = {
@@ -75,19 +89,19 @@ export default function Home() {
       2: [],
       3: [],
     };
-  
+
     for (const question of shuffledArray) {
       if (difficultyQuestions[question.difficulty].length < 1) {
         difficultyQuestions[question.difficulty].push(question);
         selectedQuestions.push(question);
       }
-      if (selectedQuestions.length === numQuestions) {        
+      if (selectedQuestions.length === numQuestions) {
         break;
       }
     }
     return selectedQuestions.sort((a, b) => a.difficulty - b.difficulty);
   };
-  
+
   const shuffleArray = (array: any[]) => {
     for (let i = array.length - 1; i > 0; i--) {
       const j = Math.floor(Math.random() * (i + 1));
@@ -95,7 +109,7 @@ export default function Home() {
     }
     return array;
   };
-  
+
   const onChangePlayer1Handler = (e: any) => {
     setTextName1(e.target.value);
   };
@@ -116,7 +130,7 @@ export default function Home() {
     const player2 = new Player(textName2);
 
     onUpdatePlayers(player1, player2);
-    setOpen(false)
+    setOpen(false);
   };
 
   const onUpdatePlayers = (p1: Player, p2: Player) => {
@@ -129,7 +143,7 @@ export default function Home() {
     setText(text);
   };
 
-  const onClickQuestionHandler = (selectedItem : SelectedItemType) => {
+  const onClickQuestionHandler = (selectedItem: SelectedItemType) => {
     setSelectedItem(selectedItem);
   };
 
@@ -141,10 +155,10 @@ export default function Home() {
   const onSubmitAnswerHandler = () => {
     setText("");
     setSelectedItem(undefined);
-    
-    if(!selectedItem) return
 
-    if(playersTurn === null) return
+    if (!selectedItem) return;
+
+    if (playersTurn === null) return;
 
     let points: number = selectedItem.question.difficulty;
 
@@ -155,10 +169,12 @@ export default function Home() {
       points = 1;
     }
 
-    const noTonalText = removeTonalMarks(text)
+    const noTonalText = removeTonalMarks(text);
     setShowScore(true);
 
-    if (noTonalText.toUpperCase() === selectedItem.question.answer.toUpperCase()) {
+    if (
+      noTonalText.toUpperCase() === selectedItem.question.answer.toUpperCase()
+    ) {
       alert("Congratulations! You got it right!");
       playersTurn.setScore(points);
     } else {
@@ -170,39 +186,36 @@ export default function Home() {
     }
 
     let qContainer = document.getElementById("container");
-    if(qContainer?.style.display === "none")
-        qContainer.style.display = "flex";
+    if (qContainer?.style.display === "none") qContainer.style.display = "flex";
 
     checkWinner();
     removeQuestion();
     pickTurn();
     setDisableButtons(false);
-  }
+  };
 
   const removeQuestion = () => {
+    if (!selectedItem) return;
 
-    if(!selectedItem) return
-
-    if(playersTurn === null) return
+    if (playersTurn === null) return;
 
     setCategories((prevCategories) => {
-
-      if(!prevCategories) return 
+      if (!prevCategories) return;
 
       const categoryIdToFilter = selectedItem.category.id;
-    
+
       const categoryToFilter = prevCategories.find(
         (category) => category.id === categoryIdToFilter
       );
-    
+
       if (!categoryToFilter) {
         return prevCategories;
       }
-    
+
       const filteredQuestions = categoryToFilter.questions.filter(
         (question) => question.id !== selectedItem.question.id
       );
-    
+
       const updatedCategories = prevCategories.map((category) => {
         if (category.id === categoryIdToFilter) {
           return {
@@ -213,10 +226,10 @@ export default function Home() {
           return category;
         }
       });
-    
+
       return updatedCategories;
     });
-    
+
     if (bonus === "") return;
 
     const updatedBonuses = playersTurn.bonus.filter(
@@ -228,7 +241,7 @@ export default function Home() {
   };
 
   const checkWinner = () => {
-    if(!categories) return
+    if (!categories) return;
 
     let count = 0;
     categories.forEach((category) => {
@@ -242,8 +255,7 @@ export default function Home() {
   };
 
   const calculateWinner = () => {
-
-    if(player1 === null || player2 === null) return
+    if (player1 === null || player2 === null) return;
 
     if (player1.score > player2.score) {
       alert(
@@ -259,8 +271,7 @@ export default function Home() {
   };
 
   const pickTurn = () => {
-
-    if(playersTurn === null || player1 === null) return 
+    if (playersTurn === null || player1 === null) return;
 
     if (playersTurn.name === player1.name) {
       setPlayersTurn(player2);
@@ -270,47 +281,46 @@ export default function Home() {
   };
 
   const retrievesAnswers = () => {
-    
-    const tempArray: Array<string> = []
+    const tempArray: Array<string> = [];
 
-    selectAnswers?.map(category => {
-      category.questions.map(question => {
-        tempArray.push(question.fiftyFiftyBonus[0])
-        tempArray.push(question.fiftyFiftyBonus[1])
-      })
-    })
+    selectAnswers?.map((category) => {
+      category.questions.map((question) => {
+        tempArray.push(question.fiftyFiftyBonus[0]);
+        tempArray.push(question.fiftyFiftyBonus[1]);
+      });
+    });
 
-    const noDuplicates: Set<string> = new Set(tempArray)
+    const noDuplicates: Set<string> = new Set(tempArray);
 
-    return Array.from(noDuplicates).sort()
-  }
+    return Array.from(noDuplicates).sort();
+  };
 
   const onClickHandleHome = () => {
-    resetAll()
-  }
+    resetAll();
+  };
 
   const resetAll = () => {
-    setToggleHome(false)
-    setIsOpenQuiz(false)
-    setIsOpenUpload(false)
-    setHideSelectButtons(true)
-    setOpen(true)
-    setShowScore(false)
-    setDisableButtons(false)
-    setSelectedItem(undefined)
-    setPlayersTurn(null)
-    setPlayer1(null)
-    setPlayer2(null)
-    setBonus("")
-    setText("")
-    setTextName1("")
-    setTextName2("")
-    fetchDataAndProcess(setCategories, setSelectAnswers)
-  }
+    setToggleHome(false);
+    setIsOpenQuiz(false);
+    setIsOpenUpload(false);
+    setHideSelectButtons(true);
+    setOpen(true);
+    setShowScore(false);
+    setDisableButtons(false);
+    setSelectedItem(undefined);
+    setPlayersTurn(null);
+    setPlayer1(null);
+    setPlayer2(null);
+    setBonus("");
+    setText("");
+    setTextName1("");
+    setTextName2("");
+    fetchDataAndProcess(setCategories, setSelectAnswers);
+  };
 
   const modalStyle = {
     display: "flex",
-    flexDirection:"column",
+    flexDirection: "column",
     width: "55%",
     bgcolor: "background.paper",
     border: "2px solid #000",
@@ -323,75 +333,91 @@ export default function Home() {
   const disableScrollbar = {
     scrollbarWidth: "none",
   };
-  
+
   return (
     <>
       {hideSelectButtons && (
-        <SelectOptions setIsOpenQuiz={setIsOpenQuiz} setIsOpenUpload={setIsOpenUpload} setHideSelectButtons={setHideSelectButtons} setToggleHome={setToggleHome}/>
+        <SelectOptions
+          setIsOpenQuiz={setIsOpenQuiz}
+          setIsOpenUpload={setIsOpenUpload}
+          setHideSelectButtons={setHideSelectButtons}
+          setToggleHome={setToggleHome}
+        />
       )}
 
       {isOpenUpload && (
-        <UploadQuestions categories={categories as CategoryType[]} setIsOpenUpload={setIsOpenUpload} setHideSelectButtons={setHideSelectButtons}><div className={styles.homeButtonContainer}>
-        <IconButton size="large" color="inherit" sx={{border: "1px solid black"}} onClick={onClickHandleHome}>
-            <HomeIcon />
-        </IconButton>
-    </div></UploadQuestions>
+        <UploadQuestions
+          categories={categories as CategoryType[]}
+          setIsOpenUpload={setIsOpenUpload}
+          setHideSelectButtons={setHideSelectButtons}
+        >
+          <div className={styles.homeButtonContainer}>
+            <IconButton
+              size="large"
+              color="inherit"
+              sx={{ border: "1px solid black" }}
+              onClick={onClickHandleHome}
+            >
+              <HomeIcon />
+            </IconButton>
+          </div>
+        </UploadQuestions>
       )}
 
       {isOpenQuiz && (
-        <Modal 
+        <Modal
           open={open}
           aria-labelledby="modal-modal-title"
           aria-describedby="modal-modal-description"
         >
-      <div className={heights.bodyFix}>
-        <Box  sx={[modalStyle,disableScrollbar,{height:"30%"}]}>
-          <Typography
-            id="modal-modal-title"
-            variant="h6"
-            component="h2"
-            sx={[{ textAlign: "center" }, { paddingBottom: "10px" },]}
-          >
-            Εισάγεται τα ονόματα των 2 παιχτών
-            <hr />
-          </Typography>
-          <div className={styles.textField}>
-            <TextField
-              fullWidth
-              id="outlined-basic"
-              label="Δώσε το όνομα του 1ου παίχτη"
-              variant="outlined"
-              value={textName1}
-              onChange={onChangePlayer1Handler}
-            />
-            <TextField
-              fullWidth
-              id="outlined-basic"
-              label="Δώσε το όνομα του 2ου παίχτη"
-              variant="outlined"
-              value={textName2}
-              onChange={onChangePlayer2Handler}
-            />
-            <Button
-              variant="contained"
-              sx={[
-                { backgroundColor: "#347FB1" },
-                {
-                  "&:hover": {
-                    backgroundColor: "#2e6a92",
-                  },
-                },
-              ]}
-              onClick={onSubmitNamesHandler}
-            >
-              Καταχωρησε τα ονοματα
-            </Button>
+          <div className={heights.bodyFix}>
+            <Box sx={[modalStyle, disableScrollbar, { height: "30%" }]}>
+              <Typography
+                id="modal-modal-title"
+                variant="h6"
+                component="h2"
+                sx={[{ textAlign: "center" }, { paddingBottom: "10px" }]}
+              >
+                Εισάγεται τα ονόματα των 2 παιχτών
+                <hr />
+              </Typography>
+              <div className={styles.textField}>
+                <TextField
+                  fullWidth
+                  id="outlined-basic"
+                  label="Δώσε το όνομα του 1ου παίχτη"
+                  variant="outlined"
+                  value={textName1}
+                  onChange={onChangePlayer1Handler}
+                />
+                <TextField
+                  fullWidth
+                  id="outlined-basic"
+                  label="Δώσε το όνομα του 2ου παίχτη"
+                  variant="outlined"
+                  value={textName2}
+                  onChange={onChangePlayer2Handler}
+                />
+                <Button
+                  variant="contained"
+                  sx={[
+                    { backgroundColor: "#347FB1" },
+                    {
+                      "&:hover": {
+                        backgroundColor: "#2e6a92",
+                      },
+                    },
+                  ]}
+                  onClick={onSubmitNamesHandler}
+                >
+                  Καταχωρησε τα ονοματα
+                </Button>
+              </div>
+            </Box>
           </div>
-        </Box>
-      </div>
         </Modal>
       )}
-      
+
       {showScore && (
         <ShowScore
           player1={player1}
@@ -401,64 +427,65 @@ export default function Home() {
         />
       )}
 
-      {(playersTurn !== null) && 
-       <>
-        <div className={styles.homeButtonContainer}>
-        <IconButton size="large" color="inherit" sx={{border: "1px solid black"}} onClick={onClickHandleHome}>
-            <HomeIcon />
-        </IconButton>
-        </div>
-       <div className={styles.outerMainScreen}>
-       
-          <div className={styles.innerMainContainer}>
-            <div className={styles.innerMain}>
-              {!selectedItem ? (
-                <div className={styles.emptyDiv}>
-                  <Typography
-                    id="modal-modal-title"
-                    variant="h6"
-                    component="h2"
-                    sx={[{ textAlign: "center" }, { fontSize: "26px" }]}
+      {playersTurn !== null && (
+        <>
+          <div className={styles.homeButtonContainer}>
+            <IconButton
+              size="large"
+              color="inherit"
+              sx={{ border: "1px solid black" }}
+              onClick={onClickHandleHome}
+            >
+              <HomeIcon />
+            </IconButton>
+          </div>
+          <div className={styles.outerMainScreen}>
+            <div className={styles.innerMainContainer}>
+              <div className={styles.innerMain}>
+                {!selectedItem ? (
+                  <div className={styles.emptyDiv}>
+                    <Typography
+                      id="modal-modal-title"
+                      variant="h6"
+                      component="h2"
+                      sx={[{ textAlign: "center" }, { fontSize: "26px" }]}
                     >
-                    {"Επίλεξε μία κατηγορία\n"}
-                    <p className={styles.playerName}>{playersTurn.name}</p>
-                  </Typography>
-                </div>
-              ) : (
-                <>
-                <MainScreen
-                selectedItem={selectedItem}
-                bonus={bonus}
-                setBonus={setBonus}
-                hasFifty={playersTurn.bonus.find(bonus => bonus === "50-50") !== undefined}
-                onSubmitAnswerHandler={onSubmitAnswerHandler}
-                onChangeAnswerHandler={onChangeAnswerHandler}
-                retrievesAnswers={retrievesAnswers}
-                text={text}
-                />
-                
-           
-           </>
-              )}
-              {categories && 
-                <QuestionsContainer
-                  categories={categories}
-                  bonuses={playersTurn.bonus}
-                  disableButtons={disableButtons}
-                  onClickBonusHandler={onClickBonusHandler}
-                  onClickQuestionHandler={onClickQuestionHandler}
-                  setDisabledButtons={setDisableButtons}
-                />
-              }
+                      {"Επίλεξε μία κατηγορία\n"}
+                      <p className={styles.playerName}>{playersTurn.name}</p>
+                    </Typography>
+                  </div>
+                ) : (
+                  <>
+                    <MainScreen
+                      selectedItem={selectedItem}
+                      bonus={bonus}
+                      setBonus={setBonus}
+                      hasFifty={
+                        playersTurn.bonus.find((bonus) => bonus === "50-50") !==
+                        undefined
+                      }
+                      onSubmitAnswerHandler={onSubmitAnswerHandler}
+                      onChangeAnswerHandler={onChangeAnswerHandler}
+                      retrievesAnswers={retrievesAnswers}
+                      text={text}
+                    />
+                  </>
+                )}
+                {categories && (
+                  <QuestionsContainer
+                    categories={categories}
+                    bonuses={playersTurn.bonus}
+                    disableButtons={disableButtons}
+                    onClickBonusHandler={onClickBonusHandler}
+                    onClickQuestionHandler={onClickQuestionHandler}
+                    setDisabledButtons={setDisableButtons}
+                  />
+                )}
+              </div>
             </div>
           </div>
-        </div>
         </>
-      }
-    
-
-      
-
-      </>
+      )}
+    </>
   );
 }
