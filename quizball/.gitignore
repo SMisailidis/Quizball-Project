@@ -2,6 +2,7 @@
 
 # dependencies
 /node_modules
+/src/configs/
 /.pnp
 .pnp.js
 # testing
@@ -9,9 +10,6 @@
 
 # production
 /build
-.firebaserc
-firebase.json
-firebase-config.ts
 
 # misc
 .DS_Store
